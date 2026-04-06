@@ -1,0 +1,1347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Cascade DAFO — WMS Intelligence Platform</title>
+<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.development.js"></script>
+<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.development.js"></script>
+<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.24.7/babel.min.js"></script>
+<style>
+:root {
+  --cascade-blue: #0057B8;
+  --cascade-blue-dark: #003F8A;
+  --cascade-blue-mid: #1A6FD4;
+  --cascade-blue-light: #E0EDFF;
+  --cascade-navy: #0D1E3A;
+  --white: #FFFFFF;
+  --surface: #F4F7FB;
+  --border: #D1DCE8;
+  --green: #065F46;
+  --green-light: #ECFDF5;
+  --amber: #D97706;
+  --amber-light: #FFFBEB;
+  --red: #C53030;
+  --red-light: #FEF2F2;
+  --text-primary: #0D1E3A;
+  --text-secondary: #5A6A7E;
+  --gray-light: #F1F5F9;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Segoe UI',system-ui,-apple-system,sans-serif; background:var(--surface); color:var(--text-primary); font-size:14px; line-height:1.5; }
+button { cursor:pointer; font-family:inherit; border:none; }
+input,select,textarea { font-family:inherit; font-size:14px; }
+/* Login */
+.login-wrap { display:flex; min-height:100vh; }
+.login-left { flex:0 0 55%; background:linear-gradient(155deg,#0D1E3A 0%,#0057B8 60%,#1A6FD4 100%); color:#fff; display:flex; flex-direction:column; justify-content:center; padding:60px; }
+.login-left h1 { font-size:36px; font-weight:700; margin-bottom:8px; }
+.login-left .tagline { font-size:18px; opacity:.85; margin-bottom:36px; }
+.login-left .features { list-style:none; }
+.login-left .features li { font-size:15px; margin-bottom:14px; opacity:.9; }
+.login-right { flex:1; display:flex; flex-direction:column; justify-content:center; padding:60px; background:#fff; }
+.login-right h2 { font-size:22px; font-weight:700; color:var(--cascade-navy); margin-bottom:4px; }
+.login-right .subtitle { color:var(--text-secondary); margin-bottom:28px; }
+.form-field { margin-bottom:16px; }
+.form-field label { display:block; font-size:12px; font-weight:600; color:var(--text-secondary); text-transform:uppercase; letter-spacing:.5px; margin-bottom:6px; }
+.form-field input { width:100%; padding:12px 14px; border:1px solid var(--border); border-radius:7px; font-size:14px; }
+.form-field input:focus { outline:none; border-color:var(--cascade-blue); box-shadow:0 0 0 3px rgba(0,87,184,.12); }
+.role-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:24px; }
+.role-card { border:2px solid var(--border); border-radius:10px; padding:14px; text-align:center; transition:all .15s; }
+.role-card:hover { border-color:var(--cascade-blue-mid); background:var(--cascade-blue-light); }
+.role-card.active { border-color:var(--cascade-blue); background:var(--cascade-blue-light); }
+.role-card .rname { font-weight:600; font-size:14px; color:var(--cascade-navy); }
+.role-card .rtitle { font-size:12px; color:var(--text-secondary); }
+.btn-primary { width:100%; padding:14px; background:var(--cascade-blue); color:#fff; font-size:16px; font-weight:600; border-radius:7px; transition:background .15s; }
+.btn-primary:hover { background:var(--cascade-blue-dark); }
+.btn-sm { padding:8px 16px; font-size:13px; font-weight:600; border-radius:7px; }
+.btn-blue { background:var(--cascade-blue); color:#fff; }
+.btn-blue:hover { background:var(--cascade-blue-dark); }
+.btn-green { background:var(--green); color:#fff; }
+.btn-green:hover { background:#054d38; }
+.btn-amber { background:var(--amber); color:#fff; }
+.btn-red { background:var(--red); color:#fff; }
+.btn-outline { background:transparent; border:1px solid var(--border); color:var(--text-primary); }
+.btn-outline:hover { border-color:var(--cascade-blue); color:var(--cascade-blue); }
+.login-footer { text-align:center; color:var(--text-secondary); font-size:12px; margin-top:24px; }
+.field-error { color:var(--red); font-size:12px; margin-top:4px; }
+/* App Shell */
+.app-shell { display:flex; min-height:100vh; }
+.sidebar { width:240px; background:var(--cascade-navy); color:#fff; display:flex; flex-direction:column; position:fixed; top:0; left:0; bottom:0; z-index:100; }
+.sidebar-logo { padding:20px 18px 12px; border-bottom:1px solid rgba(255,255,255,.1); }
+.sidebar-logo .logo-mark { display:inline-flex; align-items:center; gap:10px; }
+.sidebar-logo .logo-icon { width:32px; height:32px; background:var(--cascade-blue); border-radius:6px; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:18px; color:#fff; }
+.sidebar-logo .logo-text { font-size:15px; font-weight:600; }
+.sidebar-logo .logo-text span { color:var(--cascade-blue); }
+.sidebar-logo .logo-sub { font-size:10px; text-transform:uppercase; letter-spacing:1px; color:#7F9FCC; margin-top:2px; margin-left:42px; }
+.sidebar-nav { flex:1; padding:12px 0; overflow-y:auto; }
+.nav-section { padding:0 18px; margin-bottom:4px; }
+.nav-section-label { font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:1px; color:rgba(255,255,255,.4); padding:10px 0 6px; }
+.nav-item { display:flex; align-items:center; gap:10px; padding:10px 18px; font-size:13px; color:rgba(255,255,255,.75); cursor:pointer; border-left:3px solid transparent; transition:all .12s; border-radius:0; }
+.nav-item:hover { color:#fff; background:rgba(255,255,255,.06); }
+.nav-item.active { color:#fff; background:var(--cascade-blue-light); background:rgba(0,87,184,.2); border-left-color:var(--cascade-blue); }
+.nav-item .nav-icon { font-size:16px; width:20px; text-align:center; }
+.nav-badge { margin-left:auto; background:var(--red); color:#fff; font-size:10px; font-weight:700; padding:2px 7px; border-radius:10px; }
+.nav-badge.amber { background:var(--amber); }
+.sidebar-user { padding:16px 18px; border-top:1px solid rgba(255,255,255,.1); display:flex; align-items:center; gap:10px; }
+.sidebar-user .avatar { width:32px; height:32px; border-radius:50%; background:var(--cascade-blue); display:flex; align-items:center; justify-content:center; font-weight:600; font-size:13px; }
+.sidebar-user .uname { font-size:13px; font-weight:600; }
+.sidebar-user .urole { font-size:11px; color:rgba(255,255,255,.5); }
+.main-area { margin-left:240px; flex:1; display:flex; flex-direction:column; min-height:100vh; }
+.topbar { background:#fff; border-bottom:1px solid var(--border); padding:14px 24px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:50; }
+.topbar-title { font-size:22px; font-weight:700; color:var(--cascade-navy); }
+.topbar-actions { display:flex; align-items:center; gap:14px; }
+.topbar-search { padding:8px 14px; border:1px solid var(--border); border-radius:7px; width:220px; font-size:13px; }
+.topbar-btn { background:var(--cascade-blue-light); color:var(--cascade-blue); padding:8px 14px; border-radius:7px; font-weight:600; font-size:13px; display:flex; align-items:center; gap:6px; }
+.topbar-btn:hover { background:var(--cascade-blue); color:#fff; }
+.bell-btn { position:relative; background:none; font-size:20px; padding:4px; }
+.bell-badge { position:absolute; top:-2px; right:-4px; background:var(--red); color:#fff; font-size:9px; font-weight:700; width:16px; height:16px; border-radius:50%; display:flex; align-items:center; justify-content:center; }
+.facility-bar { background:#fff; border-bottom:1px solid var(--border); padding:10px 24px; display:flex; gap:24px; font-size:13px; }
+.facility-pill { display:flex; align-items:center; gap:8px; }
+.facility-dot { width:8px; height:8px; border-radius:50%; }
+.facility-dot.green { background:var(--green); }
+.facility-dot.amber { background:var(--amber); }
+.facility-dot.red { background:var(--red); }
+.page-content { padding:20px 24px; flex:1; }
+/* Cards and Layout */
+.card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:18px; margin-bottom:16px; }
+.card-header { font-size:15px; font-weight:600; color:var(--cascade-navy); margin-bottom:14px; display:flex; align-items:center; justify-content:space-between; }
+.kpi-row { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:14px; margin-bottom:16px; }
+.kpi-card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:18px; }
+.kpi-label { font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.5px; color:var(--text-secondary); margin-bottom:6px; }
+.kpi-value { font-size:28px; font-weight:700; color:var(--cascade-navy); }
+.kpi-trend { font-size:12px; margin-top:4px; }
+.kpi-trend.red { color:var(--red); }
+.kpi-trend.green { color:var(--green); }
+.kpi-trend.amber { color:var(--amber); }
+.grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+.grid-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+.grid-2-1 { display:grid; grid-template-columns:1.5fr 1fr; gap:16px; }
+/* Quick Action Tiles */
+.quick-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:16px; }
+.quick-tile { background:#fff; border:1px solid var(--border); border-radius:10px; padding:18px; text-align:center; cursor:pointer; transition:all .15s; }
+.quick-tile:hover { border-color:var(--cascade-blue); box-shadow:0 4px 12px rgba(0,87,184,.1); transform:translateY(-1px); }
+.quick-tile .tile-icon { font-size:28px; margin-bottom:8px; }
+.quick-tile .tile-label { font-size:13px; font-weight:600; color:var(--cascade-navy); }
+.quick-tile .tile-sub { font-size:11px; color:var(--text-secondary); margin-top:2px; }
+/* Badges */
+.badge { display:inline-flex; align-items:center; gap:4px; padding:3px 10px; border-radius:12px; font-size:11.5px; font-weight:600; }
+.badge-green { background:var(--green-light); color:var(--green); }
+.badge-amber { background:var(--amber-light); color:var(--amber); }
+.badge-red { background:var(--red-light); color:var(--red); }
+.badge-blue { background:var(--cascade-blue-light); color:var(--cascade-blue); }
+.badge-gray { background:var(--gray-light); color:var(--text-secondary); }
+/* Tables */
+.data-table { width:100%; border-collapse:collapse; }
+.data-table th { font-size:11px; font-weight:600; color:var(--text-secondary); text-transform:uppercase; letter-spacing:.5px; text-align:left; padding:10px 12px; border-bottom:2px solid var(--border); }
+.data-table td { padding:10px 12px; border-bottom:1px solid var(--border); font-size:13px; }
+.data-table tr:hover td { background:var(--cascade-blue-light); }
+/* Callouts */
+.callout { padding:14px 18px; border-radius:8px; border-left:3px solid; font-size:13px; margin-bottom:16px; }
+.callout-blue { background:var(--cascade-blue-light); border-color:var(--cascade-blue); color:var(--cascade-navy); }
+.callout-green { background:var(--green-light); border-color:var(--green); }
+.callout-amber { background:var(--amber-light); border-color:var(--amber); }
+.callout-red { background:var(--red-light); border-color:var(--red); }
+/* Intelligence card */
+.intel-card { background:linear-gradient(135deg,#0D1E3A 0%,#0057B8 100%); color:#fff; border-radius:10px; padding:22px; margin-bottom:16px; }
+.intel-card .intel-label { font-size:12px; font-weight:600; opacity:.8; margin-bottom:8px; }
+.intel-card .intel-text { font-size:14px; line-height:1.6; }
+.intel-card .intel-cta { margin-top:14px; }
+.intel-card .intel-cta button { background:rgba(255,255,255,.2); color:#fff; border:1px solid rgba(255,255,255,.3); padding:10px 20px; border-radius:7px; font-weight:600; font-size:13px; }
+.intel-card .intel-cta button:hover { background:rgba(255,255,255,.3); }
+/* Alert rows */
+.alert-row { display:flex; align-items:flex-start; gap:12px; padding:12px 0; border-bottom:1px solid var(--border); }
+.alert-row:last-child { border-bottom:none; }
+.severity-dot { width:8px; height:8px; border-radius:50%; margin-top:6px; flex-shrink:0; }
+.severity-dot.red { background:var(--red); }
+.severity-dot.amber { background:var(--amber); }
+.severity-dot.blue { background:var(--cascade-blue); }
+.alert-content { flex:1; }
+.alert-title { font-weight:600; font-size:13px; }
+.alert-desc { font-size:12px; color:var(--text-secondary); margin-top:2px; }
+.alert-rec { font-size:12px; color:var(--cascade-blue); margin-top:4px; }
+.alert-action { flex-shrink:0; margin-left:auto; }
+/* Tabs */
+.tab-bar { display:flex; gap:0; border-bottom:2px solid var(--border); margin-bottom:18px; }
+.tab-item { padding:10px 20px; font-size:13px; font-weight:600; color:var(--text-secondary); cursor:pointer; border-bottom:2px solid transparent; margin-bottom:-2px; transition:all .12s; }
+.tab-item:hover { color:var(--cascade-blue); }
+.tab-item.active { color:var(--cascade-blue); border-bottom-color:var(--cascade-blue); }
+/* Wizard */
+.wizard-steps { display:flex; align-items:center; justify-content:center; gap:0; margin-bottom:28px; padding:20px 0; }
+.wiz-step { display:flex; align-items:center; gap:0; }
+.wiz-circle { width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; }
+.wiz-circle.done { background:var(--green); color:#fff; }
+.wiz-circle.active { background:var(--cascade-blue); color:#fff; }
+.wiz-circle.pending { background:var(--gray-light); color:var(--text-secondary); border:2px solid var(--border); }
+.wiz-line { width:60px; height:2px; }
+.wiz-line.done { background:var(--green); }
+.wiz-line.pending { background:var(--border); }
+.wiz-label { font-size:11px; text-align:center; margin-top:6px; }
+.wizard-nav { display:flex; justify-content:space-between; margin-top:24px; padding-top:18px; border-top:1px solid var(--border); }
+/* Splash */
+.splash-overlay { position:fixed; inset:0; background:rgba(0,0,0,.55); display:flex; align-items:center; justify-content:center; z-index:200; }
+.splash-card { background:#fff; border-radius:10px; padding:40px; text-align:center; max-width:420px; width:90%; }
+.splash-icon { font-size:56px; margin-bottom:14px; }
+.splash-title { font-size:20px; font-weight:700; color:var(--cascade-navy); margin-bottom:8px; }
+.splash-text { font-size:14px; color:var(--text-secondary); margin-bottom:24px; line-height:1.6; }
+.splash-actions { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
+/* QR Modal */
+.qr-modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,.55); display:flex; align-items:center; justify-content:center; z-index:200; }
+.qr-modal { background:#fff; border-radius:10px; max-width:420px; width:90%; overflow:hidden; }
+.qr-modal-header { padding:18px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid var(--border); }
+.qr-modal-header h3 { font-size:16px; font-weight:600; }
+.qr-camera { width:100%; aspect-ratio:1; background:#111; position:relative; display:flex; align-items:center; justify-content:center; cursor:pointer; }
+.qr-corners { position:absolute; inset:20%; border:3px solid var(--cascade-blue); border-radius:8px; }
+.qr-scanline { position:absolute; left:20%; right:20%; height:2px; background:var(--cascade-blue); opacity:.6; animation:scanline 2s ease-in-out infinite; }
+@keyframes scanline { 0%{top:20%} 50%{top:78%} 100%{top:20%} }
+.qr-status { color:#fff; font-size:14px; position:absolute; bottom:14%; text-align:center; width:100%; }
+.qr-result { padding:18px; }
+.qr-result-card { border:2px solid var(--green); border-radius:8px; padding:14px; }
+.qr-result-card.error { border-color:var(--red); }
+.qr-result-card h4 { font-size:14px; font-weight:600; margin-bottom:6px; }
+/* Stock bar */
+.stock-bar-wrap { width:100px; height:6px; background:var(--gray-light); border-radius:3px; }
+.stock-bar { height:100%; border-radius:3px; }
+.stock-bar.green { background:var(--green); }
+.stock-bar.amber { background:var(--amber); }
+.stock-bar.red { background:var(--red); }
+/* Chart bars */
+.chart-bar-wrap { margin-bottom:10px; }
+.chart-bar-label { font-size:12px; color:var(--text-secondary); margin-bottom:4px; display:flex; justify-content:space-between; }
+.chart-bar-track { height:20px; background:var(--gray-light); border-radius:4px; overflow:hidden; }
+.chart-bar-fill { height:100%; background:var(--cascade-blue); border-radius:4px; transition:width .3s; }
+/* Mobile kanban */
+.mobile-wrap { max-width:480px; margin:0 auto; padding:20px; }
+.mobile-wrap .mobile-header { text-align:center; margin-bottom:24px; }
+.mobile-wrap .mobile-header .role-label { display:inline-block; background:var(--cascade-blue-light); color:var(--cascade-blue); padding:4px 12px; border-radius:12px; font-size:12px; font-weight:600; margin-bottom:8px; }
+.mobile-scan-btn { width:100%; padding:18px; background:var(--cascade-blue); color:#fff; border-radius:10px; font-size:16px; font-weight:600; display:flex; align-items:center; justify-content:center; gap:10px; min-height:56px; }
+.mobile-scan-btn:hover { background:var(--cascade-blue-dark); }
+.urgency-toggles { display:flex; flex-direction:column; gap:10px; margin:16px 0; }
+.urgency-btn { width:100%; padding:16px; border:2px solid var(--border); border-radius:10px; text-align:center; font-size:14px; font-weight:600; background:#fff; min-height:48px; transition:all .12s; }
+.urgency-btn.selected-green { border-color:var(--green); background:var(--green-light); color:var(--green); }
+.urgency-btn.selected-amber { border-color:var(--amber); background:var(--amber-light); color:var(--amber); }
+.urgency-btn.selected-red { border-color:var(--red); background:var(--red-light); color:var(--red); }
+.mobile-submit { width:100%; padding:18px; background:var(--green); color:#fff; border-radius:10px; font-size:16px; font-weight:600; min-height:56px; margin-top:16px; }
+.mobile-confirm { text-align:center; padding:40px 20px; }
+.mobile-confirm .confirm-icon { font-size:48px; margin-bottom:12px; }
+.mobile-confirm .confirm-title { font-size:24px; font-weight:700; color:var(--cascade-navy); margin-bottom:16px; }
+.mobile-confirm .confirm-detail { font-size:14px; color:var(--text-secondary); line-height:1.8; margin-bottom:24px; }
+.request-card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:14px; margin-bottom:10px; }
+/* Warehouse grid */
+.wh-grid { display:grid; grid-template-columns:repeat(6,1fr); gap:6px; margin:16px 0; }
+.wh-cell { padding:10px 6px; text-align:center; border:1px solid var(--border); border-radius:6px; font-size:11px; font-weight:600; cursor:pointer; transition:all .12s; }
+.wh-cell.available { background:#fff; }
+.wh-cell.available:hover { border-color:var(--cascade-blue); background:var(--cascade-blue-light); }
+.wh-cell.near-full { background:var(--amber-light); border-color:var(--amber); }
+.wh-cell.full { background:var(--gray-light); color:var(--text-secondary); cursor:not-allowed; }
+.wh-cell.selected { background:var(--cascade-blue-light); border-color:var(--cascade-blue); }
+/* Access restricted */
+.access-restricted { display:flex; align-items:center; justify-content:center; min-height:60vh; }
+.access-card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:48px; text-align:center; max-width:400px; }
+.access-card .access-icon { font-size:40px; margin-bottom:14px; }
+.access-card h2 { font-size:18px; font-weight:700; color:var(--cascade-navy); margin-bottom:8px; }
+.access-card p { font-size:14px; color:var(--text-secondary); margin-bottom:24px; }
+/* Checkbox */
+.checkbox { width:18px; height:18px; cursor:pointer; accent-color:var(--cascade-blue); }
+/* Item detail panel */
+.item-detail { padding:20px; }
+.item-detail h2 { font-size:20px; font-weight:700; margin-bottom:4px; }
+.detail-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin:18px 0; }
+.detail-section { background:var(--surface); border-radius:8px; padding:16px; }
+.detail-section h4 { font-size:12px; font-weight:600; text-transform:uppercase; color:var(--text-secondary); margin-bottom:10px; }
+.detail-row { display:flex; justify-content:space-between; font-size:13px; padding:4px 0; }
+.movement-row { display:flex; gap:10px; font-size:12px; padding:8px 0; border-bottom:1px solid var(--border); }
+.movement-row:last-child { border:none; }
+.read-only-banner { background:var(--cascade-blue-light); color:var(--cascade-blue); padding:12px 18px; border-radius:8px; font-size:13px; font-weight:600; margin-bottom:16px; display:flex; align-items:center; gap:8px; }
+/* BOL preview */
+.bol-preview { background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:20px; font-family:'Courier New',monospace; font-size:13px; line-height:1.8; white-space:pre-wrap; }
+/* PO Wizard modal */
+.po-modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,.55); display:flex; align-items:center; justify-content:center; z-index:200; overflow-y:auto; padding:20px; }
+.po-modal { background:#fff; border-radius:10px; max-width:700px; width:100%; max-height:90vh; overflow-y:auto; }
+.po-modal-header { padding:18px 24px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
+.po-modal-body { padding:24px; }
+/* Misc */
+.link { color:var(--cascade-blue); cursor:pointer; font-weight:600; font-size:13px; }
+.link:hover { text-decoration:underline; }
+.mt-2 { margin-top:8px; }
+.mt-4 { margin-top:16px; }
+.mb-2 { margin-bottom:8px; }
+.mb-4 { margin-bottom:16px; }
+.text-sm { font-size:12px; }
+.text-sec { color:var(--text-secondary); }
+.flex { display:flex; }
+.flex-between { display:flex; align-items:center; justify-content:space-between; }
+.gap-2 { gap:8px; }
+.gap-3 { gap:12px; }
+.items-center { align-items:center; }
+input[type=number] { width:80px; padding:8px; border:1px solid var(--border); border-radius:7px; text-align:center; }
+.large-num-input { width:100%; padding:14px; font-size:24px; text-align:center; border:2px solid var(--border); border-radius:10px; }
+.large-num-input:focus { border-color:var(--cascade-blue); outline:none; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const {useState, useEffect, useCallback} = React;
+
+// ==================== DATA ====================
+const ITEMS = [
+  {sku:'DAFO-FM-3-NTL',name:'DAFO EVA Foam 3mm Natural',cat:'Raw Material',wh:'CD',min:80,safety:40,onHand:212,loc:'A2-03',status:'Healthy',reorder:80,supplier:'Pacific Foam Supplies',suggestQty:200,price:1.24,daysLeft:99},
+  {sku:'PP-SHT-4-WHT',name:'PP Sheet 4mm White',cat:'Raw Material',wh:'CD',min:20,safety:10,onHand:8,loc:'B1-01',status:'Critical',reorder:20,supplier:'Pacific Industrial',suggestQty:30,price:32.00,daysLeft:0},
+  {sku:'STR-VLC-BLK-1',name:'Velcro Strap Black 1"',cat:'Assembly',wh:'CD',min:300,safety:150,onHand:210,loc:'A3-02',status:'Low',reorder:300,supplier:'Cascade Supplies',suggestQty:500,price:0.45,daysLeft:2},
+  {sku:'TX-RVT-250',name:'Rivet 1/4" Steel',cat:'Fasteners',wh:'CD',min:500,safety:200,onHand:340,loc:'C2-04',status:'Low',reorder:500,supplier:'Texas Steel Corp',suggestQty:2000,price:0.08,daysLeft:3},
+  {sku:'DAFO-FM-5-BLU',name:'EVA Foam 5mm Blue',cat:'Raw Material',wh:'CD',min:80,safety:35,onHand:45,loc:'A2-04',status:'Low',reorder:80,supplier:'Pacific Foam Supplies',suggestQty:100,price:1.56,daysLeft:4},
+  {sku:'ADH-FM-A12',name:'Foam Adhesive A-12',cat:'Consumables',wh:'CD',min:15,safety:8,onHand:8,loc:'D1-02',status:'Low',reorder:15,supplier:'Industrial Supply Co',suggestQty:24,price:8.50,daysLeft:5},
+  {sku:'BUF-STR-2MM',name:'Buffer Strip 2mm',cat:'Finishing',wh:'F0',min:150,safety:60,onHand:90,loc:'A4-01',status:'Low',reorder:150,supplier:'Cascade Supplies',suggestQty:200,price:0.38,daysLeft:7},
+  {sku:'FF-200-XS',name:'Fast Fit 200 XSmall',cat:'Finished Goods',wh:'F0',min:10,safety:5,onHand:24,loc:'F0-01',status:'Healthy',reorder:10,supplier:'',suggestQty:0,price:0,daysLeft:99},
+];
+const POS = [
+  {po:'PO-2026-0415',vendor:'Pacific Foam Supplies',items:2,total:1847,status:'Sent',sent:'Today',expected:'Apr 9',statusColor:'blue'},
+  {po:'PO-2026-0414',vendor:'Pacific Industrial',items:1,total:960,status:'In Transit',sent:'Apr 4',expected:'Apr 7',statusColor:'blue'},
+  {po:'PO-2026-0413',vendor:'Cascade Supplies',items:3,total:340,status:'Confirmed',sent:'Apr 3',expected:'Apr 8',statusColor:'green'},
+  {po:'PO-2026-0412',vendor:'Texas Steel Corp',items:12,total:2180,status:'Overdue',sent:'Mar 28',expected:'Apr 3',statusColor:'red'},
+  {po:'PO-2026-0411',vendor:'Pacific Foam Supplies',items:8,total:3840,status:'Received',sent:'Mar 25',expected:'Apr 6',statusColor:'green'},
+];
+const VENDORS = [
+  {name:'Cascade Supplies',score:9.1,onTime:97,rating:5,lead:2,lastIssue:'None',contact:'Maria Lopez'},
+  {name:'Pacific Foam Supplies',score:8.2,onTime:94,rating:4,lead:3,lastIssue:'None',contact:'Sarah Chen'},
+  {name:'Pacific Industrial',score:7.4,onTime:88,rating:3,lead:5,lastIssue:'Partial ship Apr 2',contact:'Tom Reed'},
+  {name:'Texas Steel Corp',score:5.8,onTime:71,rating:2,lead:7,lastIssue:'Overdue PO-0412',contact:''},
+];
+const TRANSFERS = [
+  {id:'REQ-2026-0089',by:'Ferndale Kanban',items:'DAFO-FM-3-NTL',qty:'40u',urgency:'Urgent',urgencyColor:'red',status:'Awaiting Pick',avail:'212 in Blaine'},
+  {id:'REQ-2026-0090',by:'Ferndale Kanban',items:'PP-SHT-4-WHT',qty:'6 rolls',urgency:'Normal',urgencyColor:'amber',status:'Awaiting Pick',avail:'14 in Blaine'},
+  {id:'REQ-2026-0088',by:'Peter Visser',items:'STR-VLC-BLK-1',qty:'100u',urgency:'Routine',urgencyColor:'green',status:'In Transit',avail:'210 in Blaine'},
+];
+const PACKING_SLIP = [
+  {name:'DAFO EVA Foam 3mm Natural',sku:'DAFO-FM-3-NTL',poQty:200,psQty:200,match:true},
+  {name:'PP Sheet 4mm White',sku:'PP-SHT-4-WHT',poQty:14,psQty:14,match:true},
+  {name:'Velcro Strap Black 1"',sku:'STR-VLC-BLK-1',poQty:500,psQty:500,match:true},
+  {name:'EVA Foam 5mm Blue',sku:'DAFO-FM-5-BLU',poQty:100,psQty:100,match:true},
+  {name:'PP Sheet 3mm Clear',sku:'PP-SHT-3-CLR',poQty:8,psQty:8,match:true},
+  {name:'Rivet 1/4" Steel',sku:'TX-RVT-250',poQty:1000,psQty:1000,match:true},
+  {name:'Foam Adhesive A-12',sku:'ADH-FM-A12',poQty:24,psQty:24,match:true},
+  {name:'Buffer Strip 2mm',sku:'BUF-STR-2MM',poQty:200,psQty:200,match:true},
+];
+const WH_LOCATIONS = [
+  {id:'A1',cap:22},{id:'A2',cap:40},{id:'A3',cap:55},{id:'A4',cap:68},
+  {id:'B1',cap:35},{id:'B2',cap:71},{id:'B3',cap:82},{id:'B4',cap:90},
+  {id:'C1',cap:20},{id:'C2',cap:45},{id:'D1',cap:30},{id:'D2',cap:50},
+];
+const ROLES = [
+  {id:'warehouse-manager',name:'Peter Visser',title:'Warehouse Manager',initials:'PV'},
+  {id:'director-manufacturing',name:'Pete Battersby',title:'Director of Manufacturing',initials:'PB'},
+  {id:'production-floor',name:'Floor Operator',title:'Production Floor Operator',initials:'FO'},
+  {id:'purchasing',name:'Purchasing Team',title:'Purchasing Team',initials:'PT'},
+  {id:'general-manager',name:'Vince',title:'General Manager',initials:'VM'},
+];
+const NAV_CONFIG = {
+  'warehouse-manager':[
+    {section:'OVERVIEW',items:[{id:'dashboard',label:'Dashboard',icon:'📊',badge:3},{id:'alerts',label:'Alerts & Intelligence',icon:'🔔'}]},
+    {section:'WAREHOUSE',items:[{id:'grn',label:'Receive Goods (GRN)',icon:'🚚'},{id:'inventory',label:'Inventory / QR Scan',icon:'📦'},{id:'cycle-count',label:'Cycle Count',icon:'🔢'}]},
+    {section:'OPERATIONS',items:[{id:'transfers',label:'Transfers — BOL',icon:'📦',badge:3,badgeColor:'amber'}]},
+    {section:'PURCHASING',items:[{id:'purchasing-view',label:'View Purchasing',icon:'📄'}]},
+  ],
+  'director-manufacturing':[
+    {section:'OVERVIEW',items:[{id:'dashboard-mfg',label:'Production Dashboard',icon:'🏭'},{id:'alerts',label:'Active Alerts',icon:'🔔'}]},
+    {section:'PRODUCTION',items:[{id:'kanban',label:'Refill Requests',icon:'📲'},{id:'transfers-mfg',label:'Transfer Status',icon:'🚚'}]},
+  ],
+  'production-floor':[
+    {section:'',items:[{id:'kanban',label:'Kanban Refill Request',icon:'📲'}]},
+  ],
+  'purchasing':[
+    {section:'OVERVIEW',items:[{id:'purchasing-dash',label:'Purchasing Dashboard',icon:'📊'}]},
+    {section:'PROCUREMENT',items:[{id:'purchasing-mgmt',label:'Purchase Worksheet',icon:'📝'},{id:'active-pos',label:'Active POs',icon:'📃'}]},
+    {section:'VENDORS',items:[{id:'vendor-perf',label:'Vendor Performance',icon:'⭐'}]},
+  ],
+  'general-manager':[
+    {section:'OVERVIEW',items:[{id:'exec-dash',label:'Executive Dashboard',icon:'📊'}]},
+    {section:'APPROVALS',items:[{id:'po-approvals',label:'PO Approval Queue',icon:'✅'}]},
+  ],
+};
+const DEFAULT_SCREENS = {'warehouse-manager':'dashboard','director-manufacturing':'dashboard-mfg','production-floor':'kanban','purchasing':'purchasing-dash','general-manager':'exec-dash'};
+
+// ==================== COMPONENTS ====================
+
+function Badge({status}) {
+  const map = {Healthy:'green',Complete:'green',Active:'green',Low:'amber',Pending:'amber',Warning:'amber',Critical:'red',Overdue:'red',Urgent:'red',Info:'blue','In Transit':'blue',Sent:'blue',Draft:'gray'};
+  const icons = {Healthy:'✅',Critical:'🔴',Low:'⚠️',Overdue:'🔴',Urgent:'🔴','In Transit':'🔵',Sent:'🔵',Complete:'✅',Active:'✅',Pending:'⚠️',Info:'🔵',Warning:'⚠️',Draft:'⚪'};
+  const c = map[status]||'gray';
+  return <span className={`badge badge-${c}`}>{icons[status]||''} {status}</span>;
+}
+
+function WizardSteps({steps,current}) {
+  return <div className="wizard-steps">{steps.map((s,i)=><React.Fragment key={i}>
+    {i>0 && <div className={`wiz-line ${i<=current?'done':'pending'}`}/>}
+    <div style={{textAlign:'center'}}>
+      <div className={`wiz-circle ${i<current?'done':i===current?'active':'pending'}`}>
+        {i<current?'✓':(i+1)}
+      </div>
+      <div className="wiz-label" style={{color:i<=current?'var(--cascade-navy)':'var(--text-secondary)',maxWidth:80,fontSize:11}}>{s}</div>
+    </div>
+  </React.Fragment>)}</div>;
+}
+
+function QRModal({onClose,onResult,context}) {
+  const [phase,setPhase] = useState('ready');
+  const doScan = ()=>{ setPhase('scanning'); setTimeout(()=>setPhase('done'),1800); };
+  return <div className="qr-modal-overlay" onClick={onClose}>
+    <div className="qr-modal" onClick={e=>e.stopPropagation()}>
+      <div className="qr-modal-header"><h3>📷 Scan QR Code</h3><button onClick={onClose} style={{fontSize:20,background:'none'}}>✕</button></div>
+      <p style={{padding:'10px 18px',fontSize:13,color:'var(--text-secondary)'}}>Point at any QR label — item, shelf, packing slip, or Kanban card</p>
+      {phase!=='done' && <div className="qr-camera" onClick={doScan}>
+        <div className="qr-corners"/>
+        {phase==='scanning' && <div className="qr-scanline"/>}
+        <div className="qr-status">{phase==='ready'?'Tap to simulate scan':'Scanning...'}</div>
+      </div>}
+      {phase==='done' && <div className="qr-result"><div className="qr-result-card">
+        <h4 style={{color:'var(--green)'}}>✅ QR SCANNED SUCCESSFULLY</h4>
+        <p style={{fontSize:13,marginTop:6}}>{context||'DAFO EVA Foam 3mm Natural'}</p>
+        <p style={{fontSize:12,color:'var(--text-secondary)'}}>SKU: DAFO-FM-3-NTL | Location: A2-03 | On Hand: 212</p>
+        <button className="btn-sm btn-blue mt-2" onClick={()=>{onResult&&onResult();onClose();}}> Confirm & Apply</button>
+      </div></div>}
+    </div>
+  </div>;
+}
+
+function SplashScreen({icon,title,text,actions}) {
+  return <div className="splash-overlay"><div className="splash-card">
+    <div className="splash-icon">{icon}</div>
+    <div className="splash-title">{title}</div>
+    <div className="splash-text">{text}</div>
+    <div className="splash-actions">{actions}</div>
+  </div></div>;
+}
+
+function StockBar({onHand,min}) {
+  const pct = Math.min(100,Math.round((onHand/Math.max(min,1))*100));
+  const c = pct>=100?'green':pct>=50?'amber':'red';
+  return <div className="stock-bar-wrap"><div className={`stock-bar ${c}`} style={{width:`${pct}%`}}/></div>;
+}
+
+function ChartBar({label,value,max,amount}) {
+  const pct = Math.round((value/max)*100);
+  return <div className="chart-bar-wrap">
+    <div className="chart-bar-label"><span>{label}</span><span>${amount?.toLocaleString()}</span></div>
+    <div className="chart-bar-track"><div className="chart-bar-fill" style={{width:`${pct}%`}}/></div>
+  </div>;
+}
+
+// ==================== LOGIN SCREEN ====================
+function LoginScreen({onLogin}) {
+  const [role,setRole]=useState('');
+  const [email,setEmail]=useState('');
+  const [pass,setPass]=useState('demo');
+  const [errors,setErrors]=useState({});
+  const handleLogin=()=>{
+    const e={};
+    if(!email)e.email='Please enter your email';
+    if(!pass)e.pass='Please enter your password';
+    if(!role)e.role='Please select a role';
+    if(Object.keys(e).length){setErrors(e);return;}
+    onLogin(role);
+  };
+  const selectRole=(r)=>{setRole(r.id);setEmail(r.name.toLowerCase().replace(/ /g,'.')+'@cascadedafo.com');setErrors({});};
+  return <div className="login-wrap">
+    <div className="login-left">
+      <h1>cascade <span style={{color:'#70B8FF'}}>DAFO</span></h1>
+      <div className="tagline">Your warehouse. Finally intelligent.</div>
+      <ul className="features">
+        <li>✨ Intuitive by design — productive from day one</li>
+        <li>🔔 Proactive alerts — never surprised by a stockout</li>
+        <li>📷 QR scan everything — receive, pick, transfer, count</li>
+        <li>🤝 Blaine & Ferndale — connected and talking</li>
+      </ul>
+    </div>
+    <div className="login-right">
+      <h2>Sign In</h2>
+      <p className="subtitle">Cascade DAFO — Warehouse Intelligence</p>
+      <div className="form-field">
+        <label>Email</label>
+        <input value={email} onChange={e=>setEmail(e.target.value)} placeholder="Enter your email"/>
+        {errors.email && <div className="field-error">{errors.email}</div>}
+      </div>
+      <div className="form-field">
+        <label>Password</label>
+        <input type="password" value={pass} onChange={e=>setPass(e.target.value)} placeholder="Enter password"/>
+        {errors.pass && <div className="field-error">{errors.pass}</div>}
+      </div>
+      <div className="form-field"><label>Select Role</label>
+        <div className="role-grid">
+          {ROLES.map(r=><div key={r.id} className={`role-card${role===r.id?' active':''}`} onClick={()=>selectRole(r)}>
+            <div className="rname">{r.name}</div><div className="rtitle">{r.title}</div>
+          </div>)}
+        </div>
+        {errors.role && <div className="field-error">{errors.role}</div>}
+      </div>
+      <button className="btn-primary" onClick={handleLogin}>Sign In →</button>
+      <div className="login-footer">Nalashaa Solutions · April 2026</div>
+    </div>
+  </div>;
+}
+
+// ==================== SCREEN 2: Warehouse Dashboard ====================
+function DashboardWM({nav}) {
+  const [dismissed,setDismissed]=useState(false);
+  return <div>
+    {!dismissed && <div className="callout callout-blue flex-between" style={{marginBottom:16}}>
+      <span>Good morning, Peter. Pick what you need below — your warehouse tells you what's urgent today.</span>
+      <button onClick={()=>setDismissed(true)} style={{background:'none',fontSize:16,color:'var(--cascade-blue)'}}>✕</button>
+    </div>}
+    <div className="intel-card">
+      <div className="intel-label">⚡ DAFONow Intelligence</div>
+      <div className="intel-text">Production forecast: 142 DAFO units this week. EVA Foam 3mm and PP Sheet 4mm are below required levels for the full run. Suggest PO now — lead time 3 days from Pacific Foam.</div>
+      <div className="intel-cta"><button onClick={()=>nav('purchasing-view')}>Review Purchase Worksheet →</button></div>
+    </div>
+    <div className="kpi-row">
+      <div className="kpi-card"><div className="kpi-label">Items Below Reorder</div><div className="kpi-value">7</div><div className="kpi-trend red">↑ +2 from yesterday</div></div>
+      <div className="kpi-card"><div className="kpi-label">Open POs</div><div className="kpi-value">4</div><div className="kpi-trend amber">1 overdue</div></div>
+      <div className="kpi-card"><div className="kpi-label">Pending Transfers</div><div className="kpi-value">3</div><div className="kpi-trend amber">1 urgent</div></div>
+      <div className="kpi-card"><div className="kpi-label">Kanban Requests Today</div><div className="kpi-value">5</div><div className="kpi-trend green">All acknowledged</div></div>
+    </div>
+    <div className="quick-grid">
+      <div className="quick-tile" onClick={()=>nav('grn')}><div className="tile-icon">🚚</div><div className="tile-label">Receive a Truck</div><div className="tile-sub">Log inbound delivery</div></div>
+      <div className="quick-tile" onClick={()=>nav('transfers')}><div className="tile-icon">📦</div><div className="tile-label">Transfer to Ferndale</div><div className="tile-sub">Generate BOL</div></div>
+      <div className="quick-tile" onClick={()=>nav('inventory')}><div className="tile-icon">🔍</div><div className="tile-label">Inventory Lookup</div><div className="tile-sub">Scan or search items</div></div>
+      <div className="quick-tile" onClick={()=>nav('transfers')}><div className="tile-icon">📲</div><div className="tile-label">Pending Requests</div><div className="tile-sub">From Ferndale production</div></div>
+      <div className="quick-tile" onClick={()=>nav('cycle-count')}><div className="tile-icon">🔢</div><div className="tile-label">Cycle Count</div><div className="tile-sub">Verify physical stock</div></div>
+      <div className="quick-tile" onClick={()=>nav('purchasing-view')}><div className="tile-icon">📄</div><div className="tile-label">View Purchasing</div><div className="tile-sub">POs and reorder status</div></div>
+    </div>
+    <div className="grid-2-1">
+      <div className="card">
+        <div className="card-header"><span>Active Alerts</span><span className="link" onClick={()=>nav('alerts')}>View all 24 →</span></div>
+        {[
+          {sev:'red',title:'DAFO EVA Foam 3mm',desc:'12 units, 85 needed this week',rec:'Create PO: 200 units, Pacific Foam',btn:'Create PO'},
+          {sev:'red',title:'PP Sheet 4mm White',desc:'8 rolls, 22 needed, 5-day lead',rec:'Expedite order',btn:'Create PO'},
+          {sev:'red',title:'PO-2026-0412 Texas Steel',desc:'Overdue 3 days, 12 items',rec:'Call vendor or source alternative',btn:'View PO'},
+          {sev:'amber',title:'Velcro Strap Black 1"',desc:'2 days stock remaining',rec:'Add to next PO',btn:'Add to PO'},
+          {sev:'blue',title:'Pacific Foam truck today',desc:'ETA 2:30 PM, PO-2026-0411',rec:'8 line items ready',btn:'Receive'},
+        ].map((a,i)=><div className="alert-row" key={i}>
+          <div className={`severity-dot ${a.sev}`}/>
+          <div className="alert-content">
+            <div className="alert-title">{a.title}</div>
+            <div className="alert-desc">{a.desc}</div>
+            <div className="alert-rec">💡 {a.rec}</div>
+          </div>
+          <div className="alert-action"><button className="btn-sm btn-blue" onClick={()=>{if(a.btn==='Receive')nav('grn');else if(a.btn.includes('PO'))nav('purchasing-view');else if(a.btn==='View PO')nav('purchasing-view');}}>{a.btn}</button></div>
+        </div>)}
+      </div>
+      <div className="card">
+        <div className="card-header">Pending Transfers from Ferndale</div>
+        {TRANSFERS.map((t,i)=><div key={i} style={{padding:'10px 0',borderBottom:i<2?'1px solid var(--border)':'none'}}>
+          <div className="flex-between"><span style={{fontWeight:600,fontSize:13}}>{t.id}</span><Badge status={t.urgency}/></div>
+          <div className="text-sm text-sec mt-2">{ITEMS.find(x=>x.sku===t.items)?.name||t.items}, {t.qty}</div>
+          <div className="mt-2">{t.status==='In Transit'?<Badge status="In Transit"/>:<button className="btn-sm btn-blue" onClick={()=>nav('transfers')}>Start Pick</button>}</div>
+        </div>)}
+      </div>
+    </div>
+  </div>;
+}
+
+// ==================== SCREEN 3: Alerts ====================
+function AlertsScreen({nav}) {
+  const [tab,setTab]=useState('all');
+  const alerts = [
+    {sev:'red',cat:'Low Stock',title:'DAFO EVA Foam 3mm',sku:'DAFO-FM-3-NTL',desc:'12 units on hand, 85 needed this week, 0 on order.',rec:'Create PO: 200 units, Pacific Foam Supplies (lead time 3 days, last price $1.24/unit)',btn:'Create PO'},
+    {sev:'red',cat:'Low Stock',title:'PP Sheet 4mm White',sku:'PP-SHT-4-WHT',desc:'8 rolls, 22 needed, lead time 5 days.',rec:'Expedite order — Pacific Industrial or pull F0 reserve',btn:'Create Expedited PO'},
+    {sev:'red',cat:'POs',title:'PO-2026-0412 Overdue',sku:'Texas Steel Corp',desc:'Expected Apr 3, 12 items, no delivery.',rec:'Call vendor, log partial receipt, or source alternative',btn:'View PO'},
+    {sev:'amber',cat:'Low Stock',title:'Velcro Strap Black 1"',sku:'STR-VLC-BLK-1',desc:'210 units, reorder 300, 2 days left',rec:'Add to next PO run',btn:'Add to PO'},
+    {sev:'amber',cat:'Low Stock',title:'Rivet 1/4" Steel',sku:'TX-RVT-250',desc:'340 units, reorder 500, 3 days',rec:'Add to next PO run',btn:'Add to PO'},
+    {sev:'blue',cat:'Transfers',title:'Pacific Foam truck arriving today',sku:'',desc:'ETA 2:30 PM, PO-2026-0411, 8 line items',rec:'Start receiving when truck arrives',btn:'Receive'},
+    {sev:'amber',cat:'Low Stock',title:'EVA Foam 5mm Blue',sku:'DAFO-FM-5-BLU',desc:'45 units, reorder 80, 4 days',rec:'Include in next Pacific Foam PO',btn:'Add to PO'},
+    {sev:'blue',cat:'Transfers',title:'BOL-2026-041 dispatched',sku:'',desc:'Ferndale — DAFO-304 (40u), ETA 10:15 AM',rec:'Ferndale to confirm receipt',btn:'View Transfer'},
+  ];
+  const tabs = [{id:'all',label:`All (${alerts.length})`},{id:'Critical',label:`Critical (${alerts.filter(a=>a.sev==='red').length})`},{id:'Low Stock',label:`Low Stock (${alerts.filter(a=>a.cat==='Low Stock').length})`},{id:'POs',label:`POs (${alerts.filter(a=>a.cat==='POs').length})`},{id:'Transfers',label:`Transfers (${alerts.filter(a=>a.cat==='Transfers').length})`}];
+  const filtered = tab==='all'?alerts:tab==='Critical'?alerts.filter(a=>a.sev==='red'):alerts.filter(a=>a.cat===tab);
+  return <div>
+    <div className="tab-bar">{tabs.map(t=><div key={t.id} className={`tab-item${tab===t.id?' active':''}`} onClick={()=>setTab(t.id)}>{t.label}</div>)}</div>
+    {filtered.map((a,i)=><div className="card" key={i} style={{padding:16}}>
+      <div className="alert-row" style={{border:'none',padding:0}}>
+        <div className={`severity-dot ${a.sev}`}/>
+        <div className="alert-content">
+          <div className="alert-title">{a.title} {a.sku&&<span className="badge badge-gray" style={{marginLeft:8}}>{a.sku}</span>}</div>
+          <div className="alert-desc">{a.desc}</div>
+          <div className="alert-rec">💡 {a.rec}</div>
+        </div>
+        <div className="alert-action"><button className="btn-sm btn-blue" onClick={()=>{if(a.btn==='Receive')nav('grn');else if(a.btn==='View Transfer')nav('transfers');else nav('purchasing-view');}}>{a.btn}</button></div>
+      </div>
+    </div>)}
+  </div>;
+}
+
+// ==================== SCREEN 4: GRN Wizard ====================
+function GRNScreen({nav}) {
+  const [step,setStep]=useState(-1);
+  const [scanned,setScanned]=useState({});
+  const [qcStatus,setQcStatus]=useState({});
+  const [locations,setLocations]=useState({});
+  const [showQR,setShowQR]=useState(false);
+  const [splash,setSplash]=useState(false);
+  const stepNames = ['Identify','Match PO','QR & QC','Put-Away','Confirm'];
+  const scanCount = Object.keys(scanned).length;
+
+  if(splash) return <SplashScreen icon="✅" title="GRN-2026-0089 Complete!" text="8 items received, 1 flagged for QC review. Blaine inventory updated. Packing slip automatically routed to Purchasing."
+    actions={<><button className="btn-sm btn-blue" onClick={()=>{setSplash(false);setStep(-1);}}>Receive Another Truck</button><button className="btn-sm btn-outline" onClick={()=>alert('GRN-2026-0089 label sent to printer.')}>Print GRN Label</button></>}/>;
+
+  if(step===-1) return <div>
+    <div className="card"><div className="card-header">Expected Deliveries</div>
+      <table className="data-table"><thead><tr><th>Vendor</th><th>PO #</th><th>ETA</th><th>Items</th><th>Status</th><th>Action</th></tr></thead>
+      <tbody>
+        <tr><td>Pacific Foam Supplies</td><td>PO-2026-0411</td><td>2:30 PM</td><td>8 items</td><td><Badge status="Pending"/></td><td><button className="btn-sm btn-blue" onClick={()=>setStep(0)}>Start Receiving</button></td></tr>
+        <tr><td>Texas Steel Corp</td><td>PO-2026-0412</td><td>Overdue</td><td>12 items</td><td><Badge status="Overdue"/></td><td><button className="btn-sm btn-blue" onClick={()=>setStep(0)}>Start Receiving</button></td></tr>
+      </tbody></table>
+    </div>
+  </div>;
+
+  return <div>
+    <WizardSteps steps={stepNames} current={step}/>
+    {showQR && <QRModal onClose={()=>setShowQR(false)} onResult={()=>{}} context="PO-2026-0411 — Pacific Foam Supplies"/>}
+
+    {step===0 && <div className="card">
+      <h3 style={{marginBottom:16}}>Step 1 — Identify Shipment</h3>
+      <div className="flex gap-3 mb-4">
+        <button className="btn-sm btn-blue" onClick={()=>setShowQR(true)}>📷 Scan Packing Slip QR</button>
+        <span style={{color:'var(--text-secondary)',padding:'8px'}}>or</span>
+        <input placeholder="Enter PO number..." defaultValue="PO-2026-0411" style={{padding:'8px 14px',border:'1px solid var(--border)',borderRadius:7,width:200}}/>
+        <button className="btn-sm btn-outline" onClick={()=>{}}>Load PO</button>
+      </div>
+      <div className="callout callout-blue">PO-2026-0411 — Pacific Foam Supplies — 8 line items — Expected today</div>
+      <div className="wizard-nav"><div/><button className="btn-sm btn-blue" onClick={()=>setStep(1)}>Next →</button></div>
+    </div>}
+
+    {step===1 && <div className="card">
+      <h3 style={{marginBottom:16}}>Step 2 — Match Packing Slip</h3>
+      <table className="data-table"><thead><tr><th>Item</th><th>SKU</th><th>PO Qty</th><th>Packing Slip Qty</th><th>Match</th></tr></thead>
+      <tbody>{PACKING_SLIP.map((p,i)=><tr key={i}><td>{p.name}</td><td><span className="badge badge-gray">{p.sku}</span></td><td>{p.poQty}</td><td>{p.psQty}</td><td><span className="badge badge-green">✅ Match</span></td></tr>)}</tbody></table>
+      <div className="wizard-nav"><button className="btn-sm btn-outline" onClick={()=>setStep(0)}>← Back</button><button className="btn-sm btn-blue" onClick={()=>setStep(2)}>Next →</button></div>
+    </div>}
+
+    {step===2 && <div className="card">
+      <h3 style={{marginBottom:16}}>Step 3 — QR Scan & QC Inspection</h3>
+      <div className="mb-4 text-sm text-sec">{scanCount}/8 items scanned</div>
+      {PACKING_SLIP.map((p,i)=><div key={i} className="flex-between" style={{padding:'10px 0',borderBottom:'1px solid var(--border)'}}>
+        <div className="flex items-center gap-3">
+          <div style={{width:10,height:10,borderRadius:'50%',background:scanned[i]?'var(--green)':'var(--border)'}}/>
+          <div><div style={{fontWeight:600,fontSize:13}}>{p.name}</div><div className="text-sm text-sec">{p.sku} — {p.poQty} units</div></div>
+        </div>
+        <div className="flex gap-2">
+          {scanned[i]?<>
+            <button className={`btn-sm ${qcStatus[i]==='pass'?'btn-green':'btn-outline'}`} onClick={()=>setQcStatus({...qcStatus,[i]:'pass'})}>✅ Pass</button>
+            <button className={`btn-sm ${qcStatus[i]==='flag'?'btn-amber':'btn-outline'}`} onClick={()=>setQcStatus({...qcStatus,[i]:'flag'})}>⚠️ Flag</button>
+          </>:<button className="btn-sm btn-blue" onClick={()=>{setScanned({...scanned,[i]:true});setQcStatus({...qcStatus,[i]:'pass'});}}>📷 Scan & Receive</button>}
+        </div>
+      </div>)}
+      <div className="wizard-nav"><button className="btn-sm btn-outline" onClick={()=>setStep(1)}>← Back</button><button className={`btn-sm ${scanCount>=8?'btn-blue':'btn-outline'}`} disabled={scanCount<1} onClick={()=>setStep(3)}>Next → {scanCount<8?`(${scanCount}/8 scanned)`:''}</button></div>
+    </div>}
+
+    {step===3 && <div className="card">
+      <h3 style={{marginBottom:16}}>Step 4 — Assign Put-Away Locations</h3>
+      <div className="callout callout-blue mb-4">Select a warehouse location for each item. Suggested locations shown first.</div>
+      <div className="wh-grid">
+        {WH_LOCATIONS.map(l=><div key={l.id} className={`wh-cell ${l.cap>95?'full':l.cap>80?'near-full':'available'}${locations.selected===l.id?' selected':''}`}
+          onClick={()=>l.cap<=95&&setLocations({...locations,selected:l.id})}>
+          {l.id}<br/><span style={{fontSize:10}}>{l.cap}%</span>
+        </div>)}
+      </div>
+      {PACKING_SLIP.slice(0,4).map((p,i)=><div key={i} className="flex-between" style={{padding:'8px 0',borderBottom:'1px solid var(--border)'}}>
+        <span style={{fontSize:13}}>{p.name}</span>
+        <select style={{padding:'6px 10px',border:'1px solid var(--border)',borderRadius:7,fontSize:13}}>
+          <option>A2-03 (Suggested)</option><option>A1</option><option>C1</option><option>D1</option>
+        </select>
+      </div>)}
+      <div className="wizard-nav"><button className="btn-sm btn-outline" onClick={()=>setStep(2)}>← Back</button><button className="btn-sm btn-blue" onClick={()=>setStep(4)}>Next →</button></div>
+    </div>}
+
+    {step===4 && <div className="card">
+      <h3 style={{marginBottom:16}}>Step 5 — Confirm GRN</h3>
+      <div style={{background:'var(--surface)',borderRadius:8,padding:18}}>
+        <div className="detail-row"><span className="text-sec">GRN Number</span><strong>GRN-2026-0089</strong></div>
+        <div className="detail-row"><span className="text-sec">PO Reference</span><strong>PO-2026-0411</strong></div>
+        <div className="detail-row"><span className="text-sec">Vendor</span><strong>Pacific Foam Supplies</strong></div>
+        <div className="detail-row"><span className="text-sec">Items Received</span><strong>8 (1 flagged for QC review)</strong></div>
+        <div className="detail-row"><span className="text-sec">Received By</span><strong>Peter Visser</strong></div>
+        <div className="detail-row"><span className="text-sec">Date</span><strong>April 6, 2026</strong></div>
+        <div className="detail-row"><span className="text-sec">Locations Confirmed</span><strong>Yes</strong></div>
+      </div>
+      <div className="form-field mt-4"><label>Notes (optional)</label><textarea style={{width:'100%',padding:10,border:'1px solid var(--border)',borderRadius:7,minHeight:60}} placeholder="Add any notes..."/></div>
+      <div className="wizard-nav"><button className="btn-sm btn-outline" onClick={()=>setStep(3)}>← Back</button><button className="btn-sm btn-green" style={{padding:'12px 28px',fontSize:15}} onClick={()=>setSplash(true)}>✅ Generate GRN & Update Inventory</button></div>
+    </div>}
+  </div>;
+}
+
+// ==================== SCREEN 5: Inventory ====================
+function InventoryScreen({nav}) {
+  const [search,setSearch]=useState('');
+  const [detail,setDetail]=useState(null);
+  const [showQR,setShowQR]=useState(false);
+  const filtered = ITEMS.filter(i=>!search||i.name.toLowerCase().includes(search.toLowerCase())||i.sku.toLowerCase().includes(search.toLowerCase()));
+
+  if(detail) return <div className="card item-detail">
+    <button className="link mb-4" onClick={()=>setDetail(null)}>← Back to Inventory</button>
+    <div className="flex items-center gap-3 mb-2"><h2>{detail.name}</h2><Badge status={detail.status}/></div>
+    <div className="text-sec mb-4">{detail.sku} — {detail.cat}</div>
+    <div className="detail-grid">
+      <div className="detail-section"><h4>Blaine Details</h4>
+        <div className="detail-row"><span>Location</span><span>{detail.loc}</span></div>
+        <div className="detail-row"><span>On Hand</span><span>{detail.onHand}</span></div>
+        <div className="detail-row"><span>Min Stock</span><span>{detail.min}</span></div>
+        <div className="detail-row"><span>Safety Stock</span><span>{detail.safety}</span></div>
+        <div className="detail-row"><span>Reorder Point</span><span>{detail.reorder}</span></div>
+      </div>
+      <div className="detail-section"><h4>Recent Movements</h4>
+        <div className="movement-row"><span className="badge badge-green">Received</span><span>Apr 6, 2026 — GRN-2026-0089 (200u)</span></div>
+        <div className="movement-row"><span className="badge badge-blue">Dispensed</span><span>Apr 4, 2026 — BOL-2026-040 (24u)</span></div>
+        <div className="movement-row"><span className="badge badge-gray">Count</span><span>Mar 28, 2026 — Variance +2</span></div>
+      </div>
+    </div>
+    <div className="flex gap-2 mt-4">
+      <button className="btn-sm btn-blue" onClick={()=>nav&&nav('transfers')}>📦 Transfer to Ferndale</button>
+      <button className="btn-sm btn-outline" onClick={()=>alert('Quantity adjustment saved.')}>Adjust Quantity</button>
+      <button className="btn-sm btn-outline" onClick={()=>alert('QR label sent to printer.')}>🖨 Print QR Label</button>
+    </div>
+  </div>;
+
+  return <div>
+    {showQR && <QRModal onClose={()=>setShowQR(false)} onResult={()=>setDetail(ITEMS[0])}/>}
+    <div className="flex gap-3 mb-4">
+      <input className="topbar-search" style={{flex:1,width:'auto'}} placeholder="🔍 Search by item name or SKU..." value={search} onChange={e=>setSearch(e.target.value)}/>
+      <button className="btn-sm btn-blue" onClick={()=>setShowQR(true)}>📷 Scan QR</button>
+      <button className="btn-sm btn-outline" onClick={()=>{const el=document.createElement('div');el.style.cssText='position:fixed;bottom:20px;right:20px;background:var(--cascade-blue);color:#fff;padding:12px 20px;border-radius:8px;z-index:999;font-size:13px;';el.textContent='Filter applied: All items';document.body.appendChild(el);setTimeout(()=>el.remove(),3000);}}>Filter</button>
+    </div>
+    <div className="callout callout-blue mb-4">Scan any QR label — shelf, item, packing slip, or Kanban card — to instantly pull up stock level, location, and recent movements.</div>
+    <div className="card">
+      <table className="data-table"><thead><tr><th>Item</th><th>SKU</th><th>Location</th><th>On Hand</th><th>Stock Level</th><th>Status</th></tr></thead>
+      <tbody>{filtered.map((it,i)=><tr key={i} onClick={()=>setDetail(it)} style={{cursor:'pointer'}}>
+        <td style={{fontWeight:600}}>{it.name}</td><td><span className="badge badge-gray">{it.sku}</span></td><td>{it.loc}</td><td>{it.onHand}</td>
+        <td><StockBar onHand={it.onHand} min={it.min}/></td><td><Badge status={it.status}/></td>
+      </tr>)}</tbody></table>
+    </div>
+  </div>;
+}
+
+// ==================== SCREEN 6: Transfers ====================
+function TransfersScreen({readOnly}) {
+  const [tab,setTab]=useState('pending');
+  const [wizStep,setWizStep]=useState(-1);
+  const [picked,setPicked]=useState({});
+  const [showQR,setShowQR]=useState(false);
+  const [splash,setSplash]=useState(false);
+  const [dispatched,setDispatched]=useState(false);
+  const stepNames=['Pick List','Scan to Pick','Generate BOL','Dispatch','Status'];
+
+  if(splash) return <SplashScreen icon="📦" title="BOL-2026-043 Dispatched!" text="Transfer dispatched to Ferndale. Estimated arrival ~45 minutes. Ferndale will be notified to confirm receipt."
+    actions={<><button className="btn-sm btn-blue" onClick={()=>{setSplash(false);setWizStep(-1);setDispatched(true);}}>Back to Transfers</button></>}/>;
+
+  if(wizStep>=0) return <div>
+    {showQR && <QRModal onClose={()=>setShowQR(false)} onResult={()=>setPicked({0:true})} context="DAFO-FM-3-NTL at A2-03"/>}
+    <WizardSteps steps={stepNames} current={wizStep}/>
+
+    {wizStep===0 && <div className="card">
+      <h3 style={{marginBottom:16}}>Step 1 — Pick List</h3>
+      <div className="callout callout-blue mb-4">Auto-generated from Kanban request REQ-2026-0089</div>
+      <table className="data-table"><thead><tr><th>Item</th><th>SKU</th><th>Qty</th><th>Location</th><th>Status</th></tr></thead>
+      <tbody><tr><td>DAFO EVA Foam 3mm Natural</td><td><span className="badge badge-gray">DAFO-FM-3-NTL</span></td><td>40 units</td><td>A2-03</td><td><Badge status="Pending"/></td></tr></tbody></table>
+      <div className="wizard-nav"><button className="btn-sm btn-outline" onClick={()=>setWizStep(-1)}>← Back to Queue</button><button className="btn-sm btn-blue" onClick={()=>setWizStep(1)}>All clear — Begin Picking →</button></div>
+    </div>}
+
+    {wizStep===1 && <div className="card">
+      <h3 style={{marginBottom:16}}>Step 2 — Scan to Confirm Pick</h3>
+      <div className="mb-4 text-sm text-sec">{Object.keys(picked).length}/1 items picked</div>
+      <div className="flex-between" style={{padding:14,background:picked[0]?'var(--green-light)':'var(--surface)',borderRadius:8}}>
+        <div><strong>DAFO EVA Foam 3mm Natural</strong><div className="text-sm text-sec">DAFO-FM-3-NTL — 40 units — A2-03</div></div>
+        {picked[0]?<Badge status="Complete"/>:<button className="btn-sm btn-blue" onClick={()=>setShowQR(true)}>📷 Scan to Pick</button>}
+      </div>
+      <div className="wizard-nav"><button className="btn-sm btn-outline" onClick={()=>setWizStep(0)}>← Back</button><button className={`btn-sm ${picked[0]?'btn-blue':'btn-outline'}`} disabled={!picked[0]} onClick={()=>setWizStep(2)}>All Picked →</button></div>
+    </div>}
+
+    {wizStep===2 && <div className="card">
+      <h3 style={{marginBottom:16}}>Step 3 — Generate BOL</h3>
+      <div className="bol-preview">{`BILL OF LADING — BOL-2026-043
+From: Blaine Warehouse, 123 Industrial Dr, Blaine WA 98230
+To:   Ferndale Production Floor, 456 Production Way, Ferndale WA
+Date: April 6, 2026
+Dispatched by: Peter Visser
+
+Items:
+DAFO EVA Foam 3mm Natural (DAFO-FM-3-NTL) — 40 units — Location: A2-03
+
+Requested by: Ferndale Production (Kanban REQ-2026-0089)
+Transport: Internal delivery`}</div>
+      <div className="callout callout-green mt-4">This BOL will be automatically routed to Purchasing — no manual packing slip needed.</div>
+      <div className="wizard-nav"><button className="btn-sm btn-outline" onClick={()=>setWizStep(1)}>← Back</button><button className="btn-sm btn-blue" onClick={()=>setWizStep(3)}>Confirm & Generate BOL →</button></div>
+    </div>}
+
+    {wizStep===3 && <div className="card">
+      <h3 style={{marginBottom:16}}>Step 4 — Dispatch Confirmation</h3>
+      <div className="form-field"><label>Handler Name</label><input defaultValue="Peter Visser" style={{width:'100%',padding:'10px 14px',border:'1px solid var(--border)',borderRadius:7}}/></div>
+      <div className="form-field"><label>Estimated Arrival at Ferndale</label><input defaultValue="~45 minutes" style={{width:'100%',padding:'10px 14px',border:'1px solid var(--border)',borderRadius:7}}/></div>
+      <div className="callout callout-blue mt-4">Ferndale will be notified to confirm receipt. When they confirm via their screen, this transfer closes automatically.</div>
+      <div className="wizard-nav"><button className="btn-sm btn-outline" onClick={()=>setWizStep(2)}>← Back</button><button className="btn-sm btn-green" style={{padding:'12px 24px'}} onClick={()=>setSplash(true)}>🚚 Mark as Dispatched</button></div>
+    </div>}
+
+    {wizStep===4 && <div className="card" style={{textAlign:'center',padding:40}}>
+      <h3>BOL-2026-043 Dispatched</h3>
+      <p className="text-sec mt-2">Waiting for Ferndale confirmation.</p>
+      <div className="flex items-center justify-center gap-3 mt-4" style={{justifyContent:'center'}}>
+        <span style={{fontSize:20}}>🚚</span><span>→</span><span style={{color:'var(--amber)'}}>⏳ Confirming</span><span>→</span><span style={{color:'var(--text-secondary)'}}>✅ Complete</span>
+      </div>
+    </div>}
+  </div>;
+
+  return <div>
+    <div className="tab-bar">
+      <div className={`tab-item${tab==='pending'?' active':''}`} onClick={()=>setTab('pending')}>Pending Requests</div>
+      <div className={`tab-item${tab==='history'?' active':''}`} onClick={()=>setTab('history')}>Transfer History</div>
+    </div>
+    {tab==='pending' && <>
+      <div className="callout callout-amber mb-4">3 pending transfer requests from Ferndale. 1 is urgent — DAFO foam needed within 2 hours.</div>
+      <div className="card"><table className="data-table"><thead><tr><th>Request ID</th><th>Requested By</th><th>Items</th><th>Stock Avail.</th><th>Urgency</th><th>Status</th><th>Action</th></tr></thead>
+      <tbody>{TRANSFERS.map((t,i)=><tr key={i}>
+        <td style={{fontWeight:600}}>{t.id}</td><td>{t.by}</td>
+        <td>{ITEMS.find(x=>x.sku===t.items)?.name||t.items}, {t.qty}</td>
+        <td>✅ {t.avail}</td><td><Badge status={t.urgency}/></td><td>{t.status}</td>
+        <td>{t.status==='Awaiting Pick'?(readOnly?<Badge status="Pending"/>:<button className="btn-sm btn-blue" onClick={()=>setWizStep(0)}>Start Pick</button>):<Badge status="In Transit"/>}</td>
+      </tr>)}</tbody></table></div>
+    </>}
+    {tab==='history' && <div className="card"><table className="data-table"><thead><tr><th>BOL</th><th>Items</th><th>Route</th><th>Date</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td>BOL-2026-040</td><td>DAFO-304 (40u)</td><td>Blaine → Ferndale</td><td>Apr 5, 2026</td><td><Badge status="Complete"/></td></tr>
+        <tr><td>BOL-2026-039</td><td>FF-200-XS (24u)</td><td>Blaine → Ferndale</td><td>Apr 4, 2026</td><td><Badge status="Complete"/></td></tr>
+      </tbody></table></div>}
+  </div>;
+}
+
+// ==================== SCREEN 7: Cycle Count ====================
+function CycleCountScreen() {
+  const [counting,setCounting]=useState(false);
+  const [counts,setCounts]=useState({});
+  const [submitted,setSubmitted]=useState(false);
+  const countItems = ITEMS.slice(0,5);
+
+  if(submitted) return <SplashScreen icon="✅" title="Cycle Count Complete!" text="A-Zone count submitted. 5 items counted, variances recorded."
+    actions={<button className="btn-sm btn-blue" onClick={()=>{setSubmitted(false);setCounting(false);setCounts({});}}>Back to Cycle Count</button>}/>;
+
+  return <div>
+    <div className="grid-2 mb-4">
+      <div className="card"><div className="card-header">Count Schedule</div>
+        <div className="detail-row"><span>A-Zone (High Value)</span><strong style={{color:'var(--red)'}}>Weekly — Due today</strong></div>
+        <div className="detail-row"><span>B-Zone (Medium)</span><strong>Monthly — Apr 15</strong></div>
+        <div className="detail-row"><span>C-Zone (Consumables)</span><strong>Quarterly — Jun 1</strong></div>
+      </div>
+      <div className="card"><div className="card-header">Last Count Summary</div>
+        <div className="detail-row"><span>Date</span><strong>March 28, 2026</strong></div>
+        <div className="detail-row"><span>Zone</span><strong>A-Zone</strong></div>
+        <div className="detail-row"><span>Items</span><strong>18 items</strong></div>
+        <div className="detail-row"><span>Variances</span><strong>2 found (both &lt;5%)</strong></div>
+        <div className="detail-row"><span>Status</span><Badge status="Complete"/></div>
+      </div>
+    </div>
+    {!counting?<button className="btn-sm btn-blue" style={{padding:'12px 24px'}} onClick={()=>setCounting(true)}>▶ Start A-Zone Count</button>
+    :<div className="card">
+      <div className="card-header">Count Sheet — A-Zone, Blaine</div>
+      <table className="data-table"><thead><tr><th>Item</th><th>SKU</th><th>Location</th><th>System Qty</th><th>Counted Qty</th><th>Variance</th></tr></thead>
+      <tbody>{countItems.map((it,i)=>{
+        const counted = counts[i];
+        const variance = counted!==undefined?(counted-it.onHand):null;
+        const pct = variance!==null?Math.abs(Math.round((variance/it.onHand)*100)):null;
+        return <tr key={i}><td>{it.name}</td><td><span className="badge badge-gray">{it.sku}</span></td><td>{it.loc}</td><td>{it.onHand}</td>
+          <td><input type="number" value={counted!==undefined?counted:''} onChange={e=>setCounts({...counts,[i]:e.target.value===''?undefined:parseInt(e.target.value)})} placeholder="Enter"/></td>
+          <td>{variance!==null?(pct===0?<span className="badge badge-green">✅ Match</span>:pct<=5?<span className="badge badge-amber">⚠️ Minor ({variance>0?'+':''}{variance})</span>:pct<=15?<span className="badge badge-red">🔴 Investigate ({variance>0?'+':''}{variance})</span>:<span className="badge badge-red">🚨 Critical ({variance>0?'+':''}{variance})</span>):'—'}</td>
+        </tr>})}</tbody></table>
+      <div className="mt-4"><button className="btn-sm btn-green" style={{padding:'12px 24px'}} onClick={()=>setSubmitted(true)}>Submit Count Report</button></div>
+    </div>}
+  </div>;
+}
+
+// ==================== SCREEN 8: Purchasing Dashboard ====================
+function PurchasingDashScreen({role,nav}) {
+  const isReadOnly = role==='warehouse-manager';
+  return <div>
+    {isReadOnly && <div className="read-only-banner">🔒 Viewing in read-only mode. To create or modify purchase orders, contact the Purchasing Team.</div>}
+    <div className="kpi-row">
+      <div className="kpi-card"><div className="kpi-label">Items Below Reorder</div><div className="kpi-value">7</div><div className="kpi-trend red">🔴 +2 from yesterday</div></div>
+      <div className="kpi-card"><div className="kpi-label">Open POs</div><div className="kpi-value">4</div><div className="kpi-trend amber">1 overdue</div></div>
+      <div className="kpi-card"><div className="kpi-label">Overdue POs</div><div className="kpi-value">1</div><div className="kpi-trend red">🔴 3 days overdue</div></div>
+      <div className="kpi-card"><div className="kpi-label">This Month's Spend</div><div className="kpi-value">$14,280</div><div className="kpi-trend amber">↑ 12% vs last month</div></div>
+      <div className="kpi-card"><div className="kpi-label">Avg Lead Time</div><div className="kpi-value">4.2 days</div><div className="kpi-trend green">↓ Improved</div></div>
+    </div>
+
+    {!isReadOnly && <div className="card">
+      <div className="card-header">📋 Your Actions Today</div>
+      {[
+        {sev:'red',text:'Create PO for DAFO EVA Foam 3mm — 0 days stock remaining',btn:'Create PO →'},
+        {sev:'red',text:'Create PO for PP Sheet 4mm White — 0 days remaining',btn:'Create PO →'},
+        {sev:'red',text:'Follow up on PO-2026-0412 Texas Steel Corp — 3 days overdue',btn:'View PO →'},
+        {sev:'amber',text:'3 more items reach reorder point in 2–5 days',btn:'Review Worksheet →'},
+      ].map((a,i)=><div key={i} className="alert-row">
+        <div className={`severity-dot ${a.sev}`}/>
+        <div className="alert-content"><div style={{fontSize:13}}>{a.text}</div></div>
+        <div className="alert-action"><button className="btn-sm btn-blue" onClick={()=>nav&&nav('purchasing-mgmt')}>{a.btn}</button></div>
+      </div>)}
+    </div>}
+
+    <div className="grid-2">
+      <div className="card">
+        <div className="card-header">Spend by Vendor (This Month)</div>
+        <ChartBar label="Pacific Foam" value={6240} max={6240} amount={6240}/>
+        <ChartBar label="Pacific Industrial" value={4800} max={6240} amount={4800}/>
+        <ChartBar label="Texas Steel" value={2180} max={6240} amount={2180}/>
+        <ChartBar label="Cascade Supplies" value={1060} max={6240} amount={1060}/>
+      </div>
+      <div className="card">
+        <div className="card-header">Recent PO Activity</div>
+        <table className="data-table"><thead><tr><th>PO #</th><th>Vendor</th><th>Action</th><th>Date</th></tr></thead>
+        <tbody>
+          <tr><td>PO-2026-0415</td><td>Pacific Foam</td><td><Badge status="Sent"/></td><td>Today</td></tr>
+          <tr><td>PO-2026-0414</td><td>Pacific Industrial</td><td><Badge status="In Transit"/></td><td>Apr 4</td></tr>
+          <tr><td>PO-2026-0413</td><td>Cascade Supplies</td><td><Badge status="Active"/></td><td>Apr 3</td></tr>
+          <tr><td>PO-2026-0412</td><td>Texas Steel</td><td><Badge status="Overdue"/></td><td>Apr 3</td></tr>
+          <tr><td>PO-2026-0411</td><td>Pacific Foam</td><td><Badge status="Complete"/></td><td>Today</td></tr>
+        </tbody></table>
+      </div>
+    </div>
+
+    {!isReadOnly && <div className="quick-grid" style={{gridTemplateColumns:'repeat(3,1fr)',marginTop:16}}>
+      <div className="quick-tile" onClick={()=>nav&&nav('purchasing-mgmt')}><div className="tile-icon">📝</div><div className="tile-label">Purchase Worksheet</div></div>
+      <div className="quick-tile" onClick={()=>nav&&nav('purchasing-mgmt')}><div className="tile-icon">📄</div><div className="tile-label">Create PO</div></div>
+      <div className="quick-tile" onClick={()=>nav&&nav('purchasing-mgmt')}><div className="tile-icon">🤝</div><div className="tile-label">Manage Contracts</div></div>
+    </div>}
+
+    {isReadOnly && <div className="card mt-4">
+      <div className="card-header">Vendor Performance</div>
+      <table className="data-table"><thead><tr><th>Vendor</th><th>Score</th><th>On-Time</th><th>Lead Time</th><th>Last Issue</th></tr></thead>
+      <tbody>{VENDORS.map((v,i)=><tr key={i}><td style={{fontWeight:600}}>{v.name}</td>
+        <td><span className={`badge badge-${v.score>=8?'green':v.score>=7?'amber':'red'}`}>{v.score}/10</span></td>
+        <td>{v.onTime}%</td><td>{v.lead} days</td><td>{v.lastIssue}</td>
+      </tr>)}</tbody></table>
+    </div>}
+  </div>;
+}
+
+// ==================== SCREEN 9: Purchasing Management ====================
+function PurchasingMgmtScreen({initialTab}) {
+  const [tab,setTab]=useState(initialTab||'worksheet');
+  const [selected,setSelected]=useState({});
+  const [poWizard,setPoWizard]=useState(-1);
+  const [poSplash,setPoSplash]=useState(false);
+  const worksheetItems = ITEMS.filter(i=>i.daysLeft<=7&&i.supplier);
+  const selCount = Object.values(selected).filter(Boolean).length;
+
+  if(poSplash) return <SplashScreen icon="📨" title={`${selCount} Purchase Orders Submitted!`}
+    text="Vendors will be notified. Expected deliveries updated in your dashboard."
+    actions={<button className="btn-sm btn-blue" onClick={()=>{setPoSplash(false);setPoWizard(-1);setSelected({});}}>Back to Purchasing</button>}/>;
+
+  return <div>
+    <div className="callout callout-amber mb-4">7 items need your attention — 2 critical stockouts possible this week.</div>
+    <div className="tab-bar">
+      {['worksheet','active-pos','blanket','vendor-perf'].map(t=><div key={t} className={`tab-item${tab===t?' active':''}`}
+        onClick={()=>setTab(t)}>{{worksheet:'Purchase Worksheet','active-pos':'Active POs',blanket:'Blanket POs','vendor-perf':'Vendor Performance'}[t]}</div>)}
+    </div>
+
+    {tab==='worksheet' && <>
+      {poWizard>=0 && <div className="po-modal-overlay" onClick={()=>setPoWizard(-1)}>
+        <div className="po-modal" onClick={e=>e.stopPropagation()}>
+          <div className="po-modal-header"><h3>Create Purchase Order</h3><button onClick={()=>setPoWizard(-1)} style={{background:'none',fontSize:20}}>✕</button></div>
+          <div className="po-modal-body">
+            <WizardSteps steps={['Review Items','Group by Vendor','PO Details','Blanket PO','Submit']} current={poWizard}/>
+            {poWizard===0 && <div>
+              <h4 className="mb-4">Selected Items</h4>
+              {worksheetItems.filter((_,i)=>selected[i]).map((it,i)=><div key={i} className="flex-between" style={{padding:'10px 0',borderBottom:'1px solid var(--border)'}}>
+                <div><strong>{it.name}</strong><div className="text-sm text-sec">Current: {it.onHand} | Min: {it.min}</div></div>
+                <div><input type="number" defaultValue={it.suggestQty}/><span className="text-sm text-sec" style={{marginLeft:8}}>units</span></div>
+              </div>)}
+              <div className="wizard-nav"><button className="btn-sm btn-outline" onClick={()=>setPoWizard(-1)}>Cancel</button><button className="btn-sm btn-blue" onClick={()=>setPoWizard(1)}>Review by Vendor →</button></div>
+            </div>}
+            {poWizard===1 && <div>
+              <h4 className="mb-4">Grouped by Vendor</h4>
+              {['Pacific Foam Supplies','Pacific Industrial','Cascade Supplies','Texas Steel Corp'].map((v,vi)=>{
+                const vitems = worksheetItems.filter(it=>it.supplier===v&&selected[worksheetItems.indexOf(it)]);
+                if(!vitems.length)return null;
+                const vendor = VENDORS.find(x=>x.name===v);
+                return <div key={vi} className="card" style={{marginBottom:12}}>
+                  <div className="flex-between mb-2"><strong>{v}</strong>{vendor&&<span className="text-sm text-sec">{vendor.score}/10 • {vendor.lead} day lead</span>}</div>
+                  {vitems.map((it,ii)=><div key={ii} className="text-sm" style={{padding:'4px 0'}}>{it.name} — {it.suggestQty}u × ${it.price.toFixed(2)} = ${(it.suggestQty*it.price).toFixed(2)}</div>)}
+                </div>;
+              })}
+              <div className="wizard-nav"><button className="btn-sm btn-outline" onClick={()=>setPoWizard(0)}>← Back</button><button className="btn-sm btn-blue" onClick={()=>setPoWizard(2)}>Review PO Details →</button></div>
+            </div>}
+            {poWizard===2 && <div>
+              <h4 className="mb-4">PO Details</h4>
+              <div className="callout callout-blue mb-4">Delivery address: Blaine Warehouse, 123 Industrial Dr, Blaine WA 98230</div>
+              <div className="form-field"><label>Requested Delivery Date</label><input defaultValue="April 9, 2026" style={{width:'100%',padding:'10px 14px',border:'1px solid var(--border)',borderRadius:7}}/></div>
+              <div className="form-field"><label>Special Instructions</label><textarea style={{width:'100%',padding:10,border:'1px solid var(--border)',borderRadius:7,minHeight:60}} placeholder="Add instructions..."/></div>
+              <div className="wizard-nav"><button className="btn-sm btn-outline" onClick={()=>setPoWizard(1)}>← Back</button><button className="btn-sm btn-blue" onClick={()=>setPoWizard(3)}>Review Blanket PO Options →</button></div>
+            </div>}
+            {poWizard===3 && <div>
+              <h4 className="mb-4">Blanket PO Options</h4>
+              <div className="callout callout-blue mb-4">DAFO EVA Foam 3mm: ordered 9× in last 12 months. Lock in pricing for 12 months — estimated 8% savings.</div>
+              <div className="flex-between" style={{padding:14,background:'var(--surface)',borderRadius:8}}>
+                <div><strong>DAFO EVA Foam 3mm</strong><div className="text-sm text-sec">Est. annual savings: ~$180</div></div>
+                <button className="btn-sm btn-outline" onClick={(e)=>{e.target.textContent='✅ Blanket PO Set';e.target.className='btn-sm btn-green';e.target.disabled=true;}}>Set Blanket PO</button>
+              </div>
+              <div className="wizard-nav"><button className="btn-sm btn-outline" onClick={()=>setPoWizard(2)}>← Back</button><button className="btn-sm btn-blue" onClick={()=>setPoWizard(4)}>Review & Submit →</button></div>
+            </div>}
+            {poWizard===4 && <div>
+              <h4 className="mb-4">Submit & Confirm</h4>
+              <div style={{background:'var(--surface)',borderRadius:8,padding:18,marginBottom:16}}>
+                <div className="detail-row"><span>POs to create</span><strong>{selCount}</strong></div>
+                <div className="detail-row"><span>Total value</span><strong>$1,825</strong></div>
+              </div>
+              <div className="wizard-nav"><button className="btn-sm btn-outline" onClick={()=>setPoWizard(3)}>← Back</button><button className="btn-sm btn-green" style={{padding:'12px 24px'}} onClick={()=>setPoSplash(true)}>📨 Submit All POs</button></div>
+            </div>}
+          </div>
+        </div>
+      </div>}
+
+      <div className="flex-between mb-4">
+        <span className="badge badge-red">Items Below Reorder Point: 7</span>
+        <div className="flex gap-2">
+          <button className="btn-sm btn-outline" onClick={()=>{const s={};worksheetItems.forEach((_,i)=>{if(worksheetItems[i].daysLeft<=1)s[i]=true;});setSelected(s);}}>Select All Critical</button>
+          <button className={`btn-sm ${selCount>0?'btn-blue':'btn-outline'}`} disabled={selCount===0} onClick={()=>setPoWizard(0)}>Create PO for {selCount} selected items →</button>
+        </div>
+      </div>
+      <div className="card">
+        <table className="data-table"><thead><tr><th></th><th>Item</th><th>SKU</th><th>On Hand</th><th>Min</th><th>Days Left</th><th>Supplier</th><th>Suggest Qty</th></tr></thead>
+        <tbody>{worksheetItems.map((it,i)=><tr key={i}>
+          <td><input type="checkbox" className="checkbox" checked={!!selected[i]} onChange={()=>setSelected({...selected,[i]:!selected[i]})}/></td>
+          <td style={{fontWeight:600}}>{it.name}</td><td><span className="badge badge-gray">{it.sku}</span></td>
+          <td>{it.onHand}</td><td>{it.min}</td>
+          <td><span className={`badge badge-${it.daysLeft<=1?'red':it.daysLeft<=5?'amber':'green'}`}>{it.daysLeft<=1?'🔴':it.daysLeft<=5?'🟡':'🟢'} {it.daysLeft} days</span></td>
+          <td>{it.supplier}</td><td>{it.suggestQty} {it.cat==='Raw Material'?'units':'units'}</td>
+        </tr>)}</tbody></table>
+      </div>
+    </>}
+
+    {tab==='active-pos' && <div className="card">
+      <table className="data-table"><thead><tr><th>PO #</th><th>Vendor</th><th>Items</th><th>Total</th><th>Sent</th><th>Expected</th><th>Status</th><th>Action</th></tr></thead>
+      <tbody>{POS.slice(0,4).map((p,i)=><tr key={i}><td style={{fontWeight:600}}>{p.po}</td><td>{p.vendor}</td><td>{p.items} items</td><td>${p.total.toLocaleString()}</td><td>{p.sent}</td><td>{p.expected}</td><td><Badge status={p.status}/></td>
+        <td><button className="btn-sm btn-outline" onClick={()=>alert(`PO Details: ${p.po}\nVendor: ${p.vendor}\nTotal: $${p.total.toLocaleString()}\nStatus: ${p.status}`)}>{p.status==='Overdue'?'Follow Up':'View'}</button></td></tr>)}</tbody></table>
+    </div>}
+
+    {tab==='blanket' && <div className="card">
+      <div className="flex-between mb-4"><span/><button className="btn-sm btn-blue" onClick={()=>alert('New contract wizard coming soon.')}>+ Create New Contract</button></div>
+      <table className="data-table"><thead><tr><th>Supplier</th><th>Contract</th><th>Items</th><th>Period</th><th>Est. Savings</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td>Pacific Foam Supplies</td><td>12-month</td><td>3 items</td><td>Apr 2026–Mar 2027</td><td>8% vs spot</td><td><Badge status="Active"/></td></tr>
+        <tr><td>Cascade Supplies</td><td>6-month</td><td>5 items</td><td>Jan–Jun 2026</td><td>5%</td><td><Badge status="Active"/></td></tr>
+        <tr><td>Industrial Supply Co</td><td>On-demand</td><td>2 items</td><td>—</td><td>—</td><td><Badge status="Draft"/></td></tr>
+      </tbody></table>
+    </div>}
+
+    {tab==='vendor-perf' && <div className="grid-2">
+      {VENDORS.map((v,i)=><div key={i} className="card">
+        <div className="flex-between mb-2"><strong style={{fontSize:15}}>{v.name}</strong><span className={`badge badge-${v.score>=8?'green':v.score>=7?'amber':'red'}`}>{v.score}/10</span></div>
+        <div className="detail-row"><span>On-Time Delivery</span><strong>{v.onTime}%</strong></div>
+        <div className="detail-row"><span>Rating</span><strong>{'★'.repeat(v.rating)}{'☆'.repeat(5-v.rating)}</strong></div>
+        <div className="detail-row"><span>Avg Lead Time</span><strong>{v.lead} days</strong></div>
+        <div className="detail-row"><span>Last Issue</span><strong style={{color:v.lastIssue==='None'?'var(--green)':'var(--red)'}}>{v.lastIssue}</strong></div>
+      </div>)}
+    </div>}
+  </div>;
+}
+
+// ==================== SCREEN 10: Director of Manufacturing Dashboard ====================
+function DashboardMfg({nav}) {
+  const [bolConfirmed,setBolConfirmed]=useState(false);
+  const [showConfirmSplash,setShowConfirmSplash]=useState(false);
+  if(showConfirmSplash) return <SplashScreen icon="✅" title="BOL-2026-041 Receipt Confirmed!" text="40 units of DAFO-304 received at Ferndale. Blaine inventory updated. Transfer complete." actions={<button className="btn-sm btn-blue" onClick={()=>setShowConfirmSplash(false)}>Back to Dashboard</button>}/>;
+  return <div>
+    <div className="kpi-row">
+      <div className="kpi-card"><div className="kpi-label">Active Production Orders</div><div className="kpi-value">14</div><div className="kpi-trend green">On track</div></div>
+      <div className="kpi-card"><div className="kpi-label">Materials In Stock (Ferndale)</div><div className="kpi-value">6 of 12</div><div className="kpi-trend amber">⚠️ 2 critical</div></div>
+      <div className="kpi-card"><div className="kpi-label">Pending Refill Requests</div><div className="kpi-value">3</div><div className="kpi-trend amber">1 urgent</div></div>
+      <div className="kpi-card"><div className="kpi-label">BOLs Received This Week</div><div className="kpi-value">7</div><div className="kpi-trend green">Normal</div></div>
+    </div>
+
+    <div className="grid-2-1">
+      <div className="card">
+        <div className="card-header">Materials Status — This Week's Production</div>
+        <table className="data-table"><thead><tr><th>Material</th><th>Needed (week)</th><th>In Ferndale</th><th>Status</th><th>Action</th></tr></thead>
+        <tbody>
+          <tr><td>DAFO EVA Foam 3mm</td><td>85 units</td><td>12 units</td><td><Badge status="Critical"/></td><td><button className="btn-sm btn-blue" onClick={()=>nav('kanban')}>Request Refill</button></td></tr>
+          <tr><td>PP Sheet 4mm White</td><td>22 rolls</td><td>8 rolls</td><td><Badge status="Critical"/></td><td><button className="btn-sm btn-blue" onClick={()=>nav('kanban')}>Request Refill</button></td></tr>
+          <tr><td>Velcro Strap Black 1"</td><td>200 units</td><td>210 units</td><td><Badge status="Healthy"/></td><td>—</td></tr>
+          <tr><td>Rivet 1/4" Steel</td><td>800 units</td><td>340 units</td><td><Badge status="Low"/></td><td><button className="btn-sm btn-blue" onClick={()=>nav('kanban')}>Request Refill</button></td></tr>
+        </tbody></table>
+      </div>
+      <div>
+        <div className="card">
+          <div className="card-header">Pending Refill Requests</div>
+          {[
+            {id:'REQ-2026-0089',item:'DAFO FM 3mm, 40u',time:'8:15 AM',status:'Being picked at Blaine',color:'amber'},
+            {id:'REQ-2026-0090',item:'PP Sheet 4mm, 6 rolls',time:'9:00 AM',status:'Awaiting pick',color:'amber'},
+            {id:'REQ-2026-0088',item:'Velcro Strap 1", 100u',time:'Yesterday',status:'Received',color:'green'},
+          ].map((r,i)=><div key={i} style={{padding:'10px 0',borderBottom:i<2?'1px solid var(--border)':'none'}}>
+            <div className="flex-between"><span style={{fontWeight:600,fontSize:13}}>{r.id}</span><span className="text-sm text-sec">{r.time}</span></div>
+            <div className="text-sm text-sec mt-2">{r.item}</div>
+            <div className="mt-2"><Badge status={r.color==='green'?'Complete':'Pending'}/></div>
+          </div>)}
+        </div>
+        <div className="card">
+          <div className="card-header">BOL Receipt Log</div>
+          <div style={{padding:'10px 0',borderBottom:'1px solid var(--border)'}}>
+            <div className="flex-between"><strong style={{fontSize:13}}>BOL-2026-041</strong><Badge status="In Transit"/></div>
+            <div className="text-sm text-sec mt-2">DAFO-304 (40u) — ETA 10:15 AM</div>
+            {!bolConfirmed?<button className="btn-sm btn-blue mt-2" onClick={()=>{setBolConfirmed(true);setShowConfirmSplash(true);}}>Confirm Receipt</button>:<Badge status="Complete"/>}
+          </div>
+          <div style={{padding:'10px 0'}}>
+            <div className="flex-between"><strong style={{fontSize:13}}>BOL-2026-040</strong><Badge status="Complete"/></div>
+            <div className="text-sm text-sec mt-2">FF-200-XS (24u) — Apr 5, 2026</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>;
+}
+
+// ==================== SCREEN 11: Kanban Refill ====================
+function KanbanScreen({role}) {
+  const [phase,setPhase]=useState('scan');
+  const [showQR,setShowQR]=useState(false);
+  const [urgency,setUrgency]=useState('');
+  const [qty,setQty]=useState(40);
+  const [bolReceived,setBolReceived]=useState(false);
+
+  return <div className="mobile-wrap">
+    {showQR && <QRModal onClose={()=>setShowQR(false)} onResult={()=>{setShowQR(false);setPhase('form');}} context="DAFO EVA Foam 3mm Natural — Station F07"/>}
+
+    <div className="mobile-header">
+      <div className="role-label">FERNDALE PRODUCTION FLOOR</div>
+      <h2 style={{fontSize:20,fontWeight:700,marginTop:8}}>Request Materials from Blaine</h2>
+      <p className="text-sm text-sec mt-2">Tap scan to request materials from Blaine Warehouse</p>
+    </div>
+
+    {phase==='scan' && <div>
+      <button className="mobile-scan-btn" onClick={()=>setShowQR(true)}>📷 SCAN KANBAN QR<br/><span style={{fontSize:13,fontWeight:400,opacity:.8}}>Tap to request a material refill</span></button>
+      <div className="mt-4"><p className="text-sm text-sec" style={{textAlign:'center',marginBottom:8}}>or search manually</p>
+        <input placeholder="Search material..." style={{width:'100%',padding:'14px',border:'1px solid var(--border)',borderRadius:10,fontSize:16}}/>
+      </div>
+    </div>}
+
+    {phase==='form' && <div>
+      <div className="card" style={{textAlign:'center'}}>
+        <div style={{fontSize:18,fontWeight:700}}>DAFO EVA Foam 3mm Natural</div>
+        <div className="text-sm text-sec mt-2">DAFO-FM-3-NTL • Station F07</div>
+        <div style={{color:'var(--green)',fontWeight:600,marginTop:8}}>Blaine has 212 units available ✅</div>
+      </div>
+      <div className="form-field"><label>Quantity</label>
+        <input type="number" className="large-num-input" value={qty} onChange={e=>setQty(e.target.value)}/>
+        <div className="text-sm text-sec mt-2" style={{textAlign:'center'}}>Standard refill: 40 units</div>
+      </div>
+      <div className="form-field"><label>Urgency</label>
+        <div className="urgency-toggles">
+          <button className={`urgency-btn${urgency==='routine'?' selected-green':''}`} onClick={()=>setUrgency('routine')}>🟢 Routine — No rush</button>
+          <button className={`urgency-btn${urgency==='low'?' selected-amber':''}`} onClick={()=>setUrgency('low')}>🟡 Running Low — Need today</button>
+          <button className={`urgency-btn${urgency==='stop'?' selected-red':''}`} onClick={()=>setUrgency('stop')}>🔴 STOP — Production at risk</button>
+        </div>
+      </div>
+      <button className="mobile-submit" onClick={()=>setPhase('confirm')}>📲 Submit Request to Blaine</button>
+    </div>}
+
+    {phase==='confirm' && <div className="mobile-confirm">
+      <div className="confirm-icon">✅</div>
+      <div className="confirm-title">Request Sent to Blaine!</div>
+      <div className="confirm-detail">
+        DAFO EVA Foam 3mm<br/>
+        {qty} units requested<br/><br/>
+        Blaine has 212 units on hand ✅<br/>
+        Your request is queued — priority: {urgency==='stop'?'URGENT':urgency==='low'?'NORMAL':'ROUTINE'}<br/><br/>
+        Estimated delivery: ~45 minutes
+      </div>
+      <button className="btn-sm btn-outline" style={{width:'100%',padding:16,fontSize:16}} onClick={()=>{setPhase('scan');setUrgency('');setQty(40);}}>Make Another Request</button>
+    </div>}
+
+    <div className="mt-4">
+      <h3 style={{fontSize:16,fontWeight:600,marginBottom:12}}>My Requests Today</h3>
+      {[
+        {item:'DAFO EVA Foam 3mm',qty:'40u',time:'8:15 AM',status:'Being picked',eta:'~30 min',color:'amber'},
+        {item:'PP Sheet 4mm',qty:'6 rolls',time:'9:00 AM',status:'Queued',eta:'~1 hr',color:'amber'},
+        {item:'Velcro Strap 1"',qty:'100u',time:'Yesterday',status:'Received',eta:'',color:'green'},
+      ].map((r,i)=><div className="request-card" key={i}>
+        <div className="flex-between"><strong style={{fontSize:14}}>{r.item}</strong><Badge status={r.color==='green'?'Complete':'Pending'}/></div>
+        <div className="text-sm text-sec mt-2">{r.qty} • Sent {r.time}{r.eta&&` • ETA: ${r.eta}`}</div>
+      </div>)}
+    </div>
+
+    {role==='director-manufacturing' && <div className="card mt-4">
+      <div className="card-header">BOL Receipt Confirmation</div>
+      {bolReceived?<div className="callout callout-green">✅ BOL-2026-043 receipt confirmed. Transfer complete.</div>:<>
+        <div className="callout callout-blue">BOL-2026-043 has arrived. Confirm receipt?</div>
+        <button className="btn-sm btn-green" style={{width:'100%',padding:14}} onClick={()=>setBolReceived(true)}>Confirm Receipt</button>
+      </>}
+    </div>}
+  </div>;
+}
+
+// ==================== SCREEN 12: Executive Dashboard ====================
+function ExecDashboard({mode}) {
+  const [approvalDemo,setApprovalDemo]=useState(false);
+  const isApprovals = mode==='approvals';
+  return <div>
+    <div className="kpi-row" style={{gridTemplateColumns:'repeat(5,1fr)'}}>
+      <div className="kpi-card"><div className="kpi-label">Inventory Investment</div><div className="kpi-value">$48,200</div><div className="kpi-trend amber">↑ 8% vs last month</div></div>
+      <div className="kpi-card"><div className="kpi-label">On-Time Delivery Rate</div><div className="kpi-value">87%</div><div className="kpi-trend amber">↓ 3% from target</div></div>
+      <div className="kpi-card"><div className="kpi-label">POs Requiring Approval</div><div className="kpi-value">{approvalDemo?0:1}</div><div className="kpi-trend green">{approvalDemo?'✅ Clear':'1 pending'}</div></div>
+      <div className="kpi-card"><div className="kpi-label">Stockout Events (MTD)</div><div className="kpi-value">2</div><div className="kpi-trend red">🔴 vs target: 0</div></div>
+      <div className="kpi-card"><div className="kpi-label">Blaine Capacity</div><div className="kpi-value">62%</div><div className="kpi-trend green">Normal</div></div>
+    </div>
+
+    <div className="card">
+      <div className="card-header">Pending Your Approval — POs above $10,000</div>
+      {approvalDemo?<div className="callout callout-green">No POs awaiting approval</div>:<div>
+        <div style={{padding:16,border:'1px solid var(--border)',borderRadius:8,marginBottom:12}}>
+          <div className="flex-between mb-2"><strong>PO-2026-0416</strong><span className="badge badge-amber">$12,400</span></div>
+          <div className="text-sm text-sec">Vendor: Pacific Foam Supplies · 3 items · Submitted by: Purchasing Team</div>
+          <div className="text-sm text-sec mt-2">EVA Foam 3mm (400u), EVA Foam 5mm (200u), PP Sheet 4mm (50 rolls)</div>
+          <div className="flex gap-2 mt-4">
+            <button className="btn-sm btn-green" onClick={()=>setApprovalDemo(true)}>✅ Approve</button>
+            <button className="btn-sm btn-red" onClick={()=>setApprovalDemo(true)}>✗ Reject</button>
+            <button className="btn-sm btn-outline">View Details</button>
+          </div>
+        </div>
+      </div>}
+    </div>
+
+    <div className="grid-2">
+      <div className="card">
+        <div className="card-header">Spend by Vendor (This Month)</div>
+        <ChartBar label="Pacific Foam" value={6240} max={6240} amount={6240}/>
+        <ChartBar label="Pacific Industrial" value={4800} max={6240} amount={4800}/>
+        <ChartBar label="Texas Steel" value={2180} max={6240} amount={2180}/>
+        <ChartBar label="Cascade Supplies" value={1060} max={6240} amount={1060}/>
+      </div>
+      <div className="card">
+        <div className="card-header">Inventory Risk Summary</div>
+        <table className="data-table"><thead><tr><th>Item</th><th>Status</th><th>Production Impact</th><th>Days</th></tr></thead>
+        <tbody>
+          <tr><td>DAFO EVA Foam 3mm</td><td><Badge status="Critical"/></td><td>Blocks DAFO line</td><td style={{fontWeight:700,color:'var(--red)'}}>0</td></tr>
+          <tr><td>PP Sheet 4mm White</td><td><Badge status="Critical"/></td><td>Blocks DAFO line</td><td style={{fontWeight:700,color:'var(--red)'}}>0</td></tr>
+          <tr><td>Velcro Strap Black 1"</td><td><Badge status="Low"/></td><td>Minor impact</td><td>2</td></tr>
+        </tbody></table>
+      </div>
+    </div>
+
+    <div className="card">
+      <div className="card-header">Supplier Performance Summary</div>
+      <table className="data-table"><thead><tr><th>Vendor</th><th>Score</th><th>On-Time %</th><th>Trend</th></tr></thead>
+      <tbody>{VENDORS.map((v,i)=><tr key={i}><td style={{fontWeight:600}}>{v.name}</td>
+        <td><span className={`badge badge-${v.score>=8?'green':v.score>=7?'amber':'red'}`}>{v.score}</span></td>
+        <td>{v.onTime}%</td>
+        <td>{v.score>=8?'↑':v.score>=7?'→':'↓ 🔴'}</td>
+      </tr>)}</tbody></table>
+    </div>
+  </div>;
+}
+
+// ==================== ACCESS RESTRICTED ====================
+function AccessRestricted({nav,role}) {
+  return <div className="access-restricted"><div className="access-card">
+    <div className="access-icon">🔒</div>
+    <h2>Access Restricted</h2>
+    <p>This screen is not available for your role.</p>
+    <button className="btn-sm btn-blue" onClick={()=>nav(DEFAULT_SCREENS[role])}>← Go to My Dashboard</button>
+  </div></div>;
+}
+
+// ==================== APP SHELL ====================
+function AppShell({role,onLogout}) {
+  const [screen,setScreen]=useState(DEFAULT_SCREENS[role]);
+  const [showGlobalQR,setShowGlobalQR]=useState(false);
+  const roleData = ROLES.find(r=>r.id===role);
+  const navGroups = NAV_CONFIG[role]||[];
+  const allNavIds = navGroups.flatMap(g=>g.items.map(i=>i.id));
+  const showFacilityBar = ['warehouse-manager','director-manufacturing'].includes(role);
+
+  // Screen title mapping
+  const titles = {dashboard:'Operations Dashboard',alerts:'Alerts & Intelligence',grn:'Receive Goods — GRN',inventory:'Inventory / QR Scan','cycle-count':'Cycle Count',transfers:'Transfers — Blaine to Ferndale','purchasing-view':'Purchasing Dashboard','purchasing-dash':'Purchasing Dashboard','purchasing-mgmt':'Purchasing','active-pos':'Active POs','vendor-perf':'Vendor Performance','dashboard-mfg':'Production Dashboard — Ferndale',kanban:'Request Materials from Blaine','transfers-mfg':'Transfer Status','exec-dash':'Executive Overview','po-approvals':'PO Approval Queue'};
+
+  const nav = (id)=>setScreen(id);
+
+  // For production-floor, render mobile-only (no sidebar)
+  if(role==='production-floor') return <div style={{background:'var(--surface)',minHeight:'100vh'}}>
+    <div style={{background:'#fff',padding:'12px 20px',borderBottom:'1px solid var(--border)',display:'flex',justifyContent:'space-between',alignItems:'center'}}>
+      <div><strong style={{fontSize:15}}>cascade <span style={{color:'var(--cascade-blue)'}}>DAFO</span></strong><div style={{fontSize:10,color:'#7F9FCC',textTransform:'uppercase',letterSpacing:1}}>WMS INTELLIGENCE</div></div>
+      <button className="btn-sm btn-outline" onClick={onLogout}>Sign Out</button>
+    </div>
+    <KanbanScreen role={role}/>
+  </div>;
+
+  const renderScreen = ()=>{
+    // Check permissions
+    if(!allNavIds.includes(screen)){
+      // Special case: warehouse-manager viewing purchasing
+      if(role==='warehouse-manager'&&screen==='purchasing-view') return <PurchasingDashScreen role={role} nav={nav}/>;
+      return <AccessRestricted nav={nav} role={role}/>;
+    }
+    switch(screen){
+      case 'dashboard': return <DashboardWM nav={nav}/>;
+      case 'alerts': return <AlertsScreen nav={nav}/>;
+      case 'grn': return <GRNScreen nav={nav}/>;
+      case 'inventory': return <InventoryScreen nav={nav}/>;
+      case 'cycle-count': return <CycleCountScreen/>;
+      case 'transfers': return <TransfersScreen/>;
+      case 'purchasing-view': return <PurchasingDashScreen role={role} nav={nav}/>;
+      case 'purchasing-dash': return <PurchasingDashScreen role={role} nav={nav}/>;
+      case 'purchasing-mgmt': return <PurchasingMgmtScreen initialTab="worksheet"/>;
+      case 'active-pos': return <PurchasingMgmtScreen initialTab="active-pos"/>;
+      case 'vendor-perf': return <PurchasingMgmtScreen initialTab="vendor-perf"/>;
+      case 'dashboard-mfg': return <DashboardMfg nav={nav}/>;
+      case 'kanban': return <KanbanScreen role={role}/>;
+      case 'transfers-mfg': return <TransfersScreen readOnly={true}/>;
+      case 'exec-dash': return <ExecDashboard mode="overview"/>;
+      case 'po-approvals': return <ExecDashboard mode="approvals"/>;
+      default: return <AccessRestricted nav={nav} role={role}/>;
+    }
+  };
+
+  return <div className="app-shell">
+    <div className="sidebar">
+      <div className="sidebar-logo">
+        <div className="logo-mark"><div className="logo-icon">C</div><div className="logo-text">cascade <span>DAFO</span></div></div>
+        <div className="logo-sub">WMS INTELLIGENCE</div>
+      </div>
+      <div className="sidebar-nav">
+        {navGroups.map((g,gi)=><div key={gi} className="nav-section">
+          {g.section && <div className="nav-section-label">{g.section}</div>}
+          {g.items.map(item=><div key={item.id} className={`nav-item${screen===item.id?' active':''}`} onClick={()=>nav(item.id)}>
+            <span className="nav-icon">{item.icon}</span>{item.label}
+            {item.badge && <span className={`nav-badge${item.badgeColor?' '+item.badgeColor:''}`}>{item.badge}</span>}
+          </div>)}
+        </div>)}
+      </div>
+      <div className="sidebar-user" style={{cursor:'pointer'}} onClick={onLogout}>
+        <div className="avatar">{roleData?.initials}</div>
+        <div><div className="uname">{roleData?.name}</div><div className="urole">{roleData?.title}</div></div>
+      </div>
+    </div>
+    <div className="main-area">
+      <div className="topbar">
+        <div className="topbar-title">{titles[screen]||'Dashboard'}</div>
+        <div className="topbar-actions">
+          <input className="topbar-search" placeholder="🔍 Search..."/>
+          <button className="topbar-btn" onClick={()=>setShowGlobalQR(true)}>📷 Scan QR</button>
+          <button className="bell-btn" onClick={()=>nav('alerts')}><span style={{fontSize:20}}>🔔</span><span className="bell-badge">3</span></button>
+          <div style={{width:32,height:32,borderRadius:'50%',background:'var(--cascade-blue)',display:'flex',alignItems:'center',justifyContent:'center',color:'#fff',fontWeight:600,fontSize:13}}>{roleData?.initials}</div>
+        </div>
+      </div>
+      {showFacilityBar && <div className="facility-bar">
+        <div className="facility-pill"><div className="facility-dot amber"/> <strong>BLAINE</strong> 62% capacity · 3 trucks today</div>
+        <div className="facility-pill"><div className="facility-dot red"/> <strong>FERNDALE</strong> 78% capacity · 14 active orders</div>
+      </div>}
+      {role==='general-manager'&&screen!=='exec-dash'&&screen!=='po-approvals'&&<div className="read-only-banner" style={{margin:'20px 24px 0'}}>Viewing in read-only mode — executive overview only.</div>}
+      {showGlobalQR && <QRModal onClose={()=>setShowGlobalQR(false)} onResult={()=>{setShowGlobalQR(false);nav('inventory');}}/>}
+      <div className="page-content">{renderScreen()}</div>
+    </div>
+  </div>;
+}
+
+// ==================== ROOT ====================
+function App() {
+  const [role,setRole] = useState(null);
+  if(!role) return <LoginScreen onLogin={setRole}/>;
+  return <AppShell role={role} onLogout={()=>setRole(null)}/>;
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>
