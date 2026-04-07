@@ -276,6 +276,168 @@ input,select,textarea { font-family:inherit; font-size:14px; }
 input[type=number] { width:80px; padding:8px; border:1px solid var(--border); border-radius:7px; text-align:center; }
 .large-num-input { width:100%; padding:14px; font-size:24px; text-align:center; border:2px solid var(--border); border-radius:10px; }
 .large-num-input:focus { border-color:var(--cascade-blue); outline:none; }
+/* EXEC-01: Spend gauge */
+.spend-gauge { margin:12px 0; }
+.spend-gauge-label { font-size:13px; color:var(--text-secondary); margin-bottom:6px; }
+.spend-gauge-bar { height:12px; background:var(--surface); border-radius:6px; overflow:hidden; }
+.spend-gauge-fill { height:100%; border-radius:6px; transition:width .3s; }
+.spend-gauge-text { display:flex; align-items:center; justify-content:space-between; margin-top:6px; font-size:13px; }
+/* A-01: Alerts pane */
+.alerts-pane-overlay { position:fixed; inset:0; background:rgba(0,0,0,.3); z-index:150; }
+.alerts-pane { position:fixed; top:0; right:0; bottom:0; width:440px; background:#fff; z-index:151; box-shadow:-4px 0 20px rgba(0,0,0,.1); display:flex; flex-direction:column; animation:paneSlideIn .3s ease; }
+.alerts-pane-header { padding:16px 20px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; background:var(--cascade-navy); color:#fff; }
+.alerts-pane-header h3 { font-size:16px; font-weight:700; }
+.alerts-pane-body { flex:1; overflow-y:auto; padding:0; }
+.alerts-pane .tab-bar { padding:0 16px; border-bottom:2px solid var(--border); }
+.alerts-pane .tab-item { padding:8px 12px; font-size:12px; }
+.alerts-pane .alert-pane-item { padding:12px 16px; border-bottom:1px solid var(--border); }
+.alerts-pane .alert-pane-item:hover { background:var(--surface); }
+/* PD-01: Inventory Level Trends */
+.inv-trend-row { display:flex; align-items:center; gap:12px; padding:10px 0; border-bottom:1px solid var(--border); }
+.inv-trend-row:last-child { border:none; }
+.inv-trend-name { width:160px; font-size:13px; font-weight:600; color:var(--cascade-navy); flex-shrink:0; }
+.inv-trend-bar-wrap { flex:1; position:relative; height:24px; background:var(--surface); border-radius:4px; }
+.inv-trend-fill { height:100%; border-radius:4px; display:flex; align-items:center; padding-left:8px; }
+.inv-trend-fill span { font-size:11px; font-weight:700; color:#fff; white-space:nowrap; }
+.inv-trend-threshold { position:absolute; top:-2px; bottom:-2px; width:2px; background:var(--red); z-index:1; }
+.inv-trend-action { flex-shrink:0; margin-left:8px; }
+/* PD-02: Replenishment slide pane */
+.replenish-pane-overlay { position:fixed; inset:0; background:rgba(0,0,0,.3); z-index:150; }
+.replenish-pane { position:fixed; top:0; right:0; bottom:0; width:440px; background:#fff; z-index:151; box-shadow:-4px 0 20px rgba(0,0,0,.1); display:flex; flex-direction:column; animation:paneSlideIn .3s ease; }
+@keyframes paneSlideIn { from{transform:translateX(100%)} to{transform:translateX(0)} }
+.replenish-pane-header { padding:16px 20px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; background:var(--cascade-navy); color:#fff; }
+.replenish-pane-header h3 { font-size:16px; font-weight:700; }
+.replenish-pane-body { flex:1; overflow-y:auto; padding:20px; }
+.replenish-pane-body .vendor-suggest { background:var(--surface); border-radius:8px; padding:14px; margin-top:12px; }
+/* PD-02: Session accumulator bottom bar (Component 16) */
+.session-bar { position:fixed; bottom:0; left:240px; right:0; height:56px; background:var(--cascade-navy); color:#fff; display:flex; align-items:center; justify-content:space-between; padding:0 24px; z-index:100; font-size:14px; font-weight:600; }
+.session-bar .session-cta { background:var(--cascade-blue); color:#fff; padding:10px 20px; border-radius:6px; font-weight:700; font-size:14px; border:none; cursor:pointer; }
+.session-bar .session-cta:hover { background:var(--cascade-blue-dark); }
+/* PD-03: Trend line chart (simple SVG) */
+.trend-chart { width:100%; height:180px; position:relative; }
+.trend-chart svg { width:100%; height:100%; }
+.trend-chart .chart-line { fill:none; stroke:var(--cascade-blue); stroke-width:2; }
+.trend-chart .chart-dot { fill:var(--cascade-blue); }
+.trend-chart .chart-grid-line { stroke:var(--border); stroke-width:1; stroke-dasharray:4; }
+.trend-chart .chart-label { font-size:11px; fill:var(--text-secondary); }
+.chart-tooltip { position:absolute; background:#fff; border:1px solid var(--border); border-radius:6px; padding:8px 12px; font-size:13px; font-weight:600; color:var(--cascade-navy); box-shadow:0 4px 12px rgba(0,0,0,.1); pointer-events:none; white-space:nowrap; transform:translate(-50%,-100%); margin-top:-10px; z-index:10; }
+/* PM-01: Invoice preview */
+.invoice-vendor-block { border:1px solid var(--border); border-radius:8px; margin-bottom:14px; overflow:hidden; }
+.invoice-vendor-header { background:var(--surface); padding:12px 16px; font-weight:700; font-size:14px; color:var(--cascade-navy); display:flex; align-items:center; justify-content:space-between; }
+.invoice-line-item { display:grid; grid-template-columns:2fr 1fr 1fr 1fr; padding:10px 16px; border-bottom:1px solid var(--border); font-size:13px; }
+.invoice-line-item:last-child { border:none; }
+.invoice-subtotal { background:var(--surface); padding:10px 16px; font-weight:700; font-size:13px; text-align:right; }
+.invoice-grand-total { background:var(--cascade-navy); color:#fff; padding:14px 20px; border-radius:8px; font-size:16px; font-weight:700; display:flex; align-items:center; justify-content:space-between; margin-top:16px; }
+/* GRN-03: Enhanced warehouse grid cell */
+.wh-grid-enhanced { display:grid; grid-template-columns:repeat(5,1fr); gap:8px; margin:16px 0; }
+.wh-cell-v2 { padding:12px 8px; text-align:center; border-radius:8px; font-size:11px; font-weight:600; cursor:pointer; transition:all .15s; min-height:80px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; }
+.wh-cell-v2.avail { background:#fff; border:1px solid var(--green); color:var(--green); }
+.wh-cell-v2.avail:hover { background:var(--green-light); border-width:2px; }
+.wh-cell-v2.near-full { background:var(--amber-light); border:1px solid var(--amber); color:var(--amber); }
+.wh-cell-v2.near-full:hover { border-width:2px; }
+.wh-cell-v2.full { background:var(--surface); border:1px solid var(--border); color:var(--text-secondary); cursor:not-allowed; opacity:.6; }
+.wh-cell-v2.selected { background:var(--cascade-blue-light); border:2px solid var(--cascade-blue); color:var(--cascade-blue); }
+.wh-cell-v2.confirmed { background:var(--green-light); border:2px solid var(--green); color:var(--green); }
+.wh-cell-v2 .cell-label { font-size:13px; font-weight:700; }
+.wh-cell-v2 .cell-pct { font-size:10px; }
+.wh-cell-v2 .cell-tag { font-size:9px; font-weight:700; text-transform:uppercase; }
+.wh-expand-panel { background:var(--cascade-blue-light); border:2px solid var(--cascade-blue); border-radius:8px; padding:16px; margin:12px 0; }
+.wh-expand-panel h4 { font-size:14px; font-weight:700; color:var(--cascade-navy); margin-bottom:8px; }
+/* GRN-02: QC split panel buttons */
+.qc-btn-large { width:100%; padding:20px; font-size:16px; font-weight:700; border-radius:10px; border:none; color:#fff; cursor:pointer; margin-bottom:10px; min-height:60px; transition:all .15s; }
+.qc-btn-large:hover { filter:brightness(.9); transform:scale(.98); }
+/* INV-01: Facility View */
+.facility-view { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px; }
+.facility-panel { background:#fff; border:1px solid var(--border); border-radius:10px; padding:18px; }
+.facility-panel h3 { font-size:15px; font-weight:700; color:var(--cascade-navy); margin-bottom:14px; }
+.facility-item-row { margin-bottom:12px; }
+.facility-item-name { font-size:13px; font-weight:600; color:var(--cascade-navy); margin-bottom:4px; }
+.facility-bar-wrap { position:relative; height:24px; background:var(--surface); border-radius:4px; overflow:visible; }
+.facility-bar-fill { height:100%; border-radius:4px; transition:width .3s; display:flex; align-items:center; padding-left:8px; }
+.facility-bar-fill span { font-size:11px; font-weight:700; color:#fff; white-space:nowrap; }
+.facility-bar-qty { position:absolute; right:8px; top:50%; transform:translateY(-50%); font-size:12px; font-weight:600; color:var(--text-primary); }
+.facility-threshold { position:absolute; top:-2px; bottom:-2px; width:1px; background:var(--red); z-index:1; }
+.transfer-opportunities { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:18px; }
+.transfer-opportunities h3 { font-size:15px; font-weight:700; color:var(--cascade-navy); margin-bottom:12px; border-bottom:2px solid var(--border); padding-bottom:8px; }
+.transfer-opp-row { display:flex; align-items:center; justify-content:space-between; padding:10px 0; border-bottom:1px solid var(--border); }
+.transfer-opp-row:last-child { border:none; }
+/* D-01: Intel Ribbon */
+.intel-ribbon { display:flex; align-items:stretch; border:1px solid var(--border); border-radius:8px; overflow:hidden; margin-bottom:14px; height:56px; }
+.intel-ribbon-tab { flex:0 0 90px; background:var(--cascade-blue); display:flex; align-items:center; justify-content:center; color:#fff; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.5px; }
+.intel-ribbon-body { flex:1; padding:0 16px; display:flex; align-items:center; background:#fff; font-size:13px; color:var(--text-primary); }
+.intel-ribbon-body .item-critical { color:var(--red); font-weight:700; }
+.intel-ribbon-body .sub-text { color:var(--text-secondary); font-size:12px; margin-left:8px; }
+.intel-ribbon-cta { flex:0 0 auto; display:flex; align-items:center; padding:0 16px; background:var(--cascade-blue-light); border-left:1px solid var(--border); cursor:pointer; font-size:13px; font-weight:600; color:var(--cascade-blue); transition:background .15s; }
+.intel-ribbon-cta:hover { background:var(--cascade-blue); color:#fff; }
+/* D-02: Compact KPI tiles */
+.kpi-compact-row { display:grid; grid-template-columns:repeat(5,1fr); gap:10px; margin-bottom:14px; }
+.kpi-compact { display:flex; align-items:center; gap:10px; background:#fff; border:1px solid var(--border); border-radius:8px; padding:10px 14px; height:64px; cursor:pointer; transition:all .15s; }
+.kpi-compact:hover { background:var(--surface); border-color:var(--cascade-blue); }
+.kpi-compact .kpi-icon { font-size:22px; flex-shrink:0; }
+.kpi-compact .kpi-num { font-size:22px; font-weight:700; color:var(--cascade-navy); }
+.kpi-compact .kpi-meta { font-size:11px; color:var(--text-secondary); line-height:1.3; }
+.kpi-compact .kpi-delta { font-size:11px; font-weight:600; }
+.kpi-compact.error { background:var(--red-light); border-color:var(--red); }
+.kpi-compact.error .kpi-num { color:var(--red); }
+/* D-02: Capacity battery */
+.capacity-battery { display:flex; align-items:center; gap:8px; }
+.capacity-bar { width:60px; height:10px; background:var(--surface); border-radius:5px; overflow:hidden; }
+.capacity-fill { height:100%; border-radius:5px; transition:width .3s; }
+.capacity-label { font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:.5px; color:var(--text-secondary); }
+/* D-03: Tile status badge */
+.tile-badge { display:inline-block; font-size:11px; font-weight:600; padding:2px 8px; border-radius:10px; margin-top:6px; }
+/* D-04: Alert card grid */
+.alert-card-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:16px; }
+.alert-card { background:#fff; border:1px solid var(--border); border-radius:8px; overflow:hidden; }
+.alert-card-bar { height:3px; }
+.alert-card-bar.red { background:var(--red); }
+.alert-card-bar.amber { background:var(--amber); }
+.alert-card-bar.blue { background:var(--cascade-blue); }
+.alert-card-body { padding:12px 14px; }
+.alert-card-body .alert-card-title { font-size:12px; font-weight:700; color:var(--cascade-navy); margin-bottom:4px; }
+.alert-card-body .alert-card-desc { font-size:11px; color:var(--text-secondary); line-height:1.4; }
+.alert-card-actions { display:grid; grid-template-columns:repeat(4,1fr); border-top:1px solid var(--border); }
+.alert-card-actions button { background:none; border:none; padding:8px 4px; font-size:12px; cursor:pointer; color:var(--text-secondary); transition:color .12s; display:flex; flex-direction:column; align-items:center; gap:2px; min-height:40px; justify-content:center; }
+.alert-card-actions button:hover { color:var(--cascade-blue); background:var(--cascade-blue-light); }
+.alert-card-actions button:not(:last-child) { border-right:1px solid var(--border); }
+/* D-05: Mini transfer cards */
+.transfer-mini-card { background:#fff; border:1px solid var(--border); border-radius:8px; padding:12px 14px; margin-bottom:10px; }
+.transfer-mini-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:6px; }
+.transfer-mini-header .req-id { font-size:13px; font-weight:700; color:var(--cascade-navy); }
+.transfer-mini-item { font-size:12px; color:var(--text-secondary); margin-bottom:8px; }
+.transfer-mini-footer { display:flex; align-items:center; justify-content:space-between; font-size:12px; }
+.transfer-mini-footer .stock-avail { color:var(--green); font-weight:600; }
+/* G-02: Split-panel QR modal */
+.qr-split-modal { background:#fff; border-radius:12px; width:640px; max-width:92%; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,.3); }
+.qr-split-modal .qr-modal-header { padding:14px 18px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid var(--border); }
+.qr-split-modal .qr-modal-header h3 { font-size:16px; font-weight:600; }
+.qr-split-body { display:flex; height:420px; }
+.qr-split-left { flex:0 0 48%; padding:20px; display:flex; flex-direction:column; justify-content:center; border-right:1px solid var(--border); }
+.qr-split-right { flex:0 0 52%; display:flex; align-items:center; justify-content:center; padding:20px; }
+.qr-split-right .qr-action-btn { width:100%; min-height:100px; font-size:16px; font-weight:700; border-radius:10px; border:none; color:#fff; cursor:pointer; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; transition:all .15s; }
+.qr-split-right .qr-action-btn:hover { transform:scale(0.98); filter:brightness(0.9); }
+.qr-info-card { background:var(--surface); border-radius:8px; padding:16px; }
+.qr-info-card h4 { font-size:15px; font-weight:700; color:var(--cascade-navy); margin-bottom:8px; }
+.qr-info-card .qr-info-row { display:flex; justify-content:space-between; font-size:13px; padding:4px 0; color:var(--text-secondary); }
+.qr-info-card .qr-info-row strong { color:var(--text-primary); }
+/* G-03: Toast notification */
+.toast-container { position:fixed; bottom:24px; right:24px; z-index:300; display:flex; flex-direction:column; gap:8px; }
+.toast { padding:14px 20px; border-radius:8px; font-size:13px; font-weight:600; color:#fff; display:flex; align-items:center; gap:10px; animation:toastIn .3s ease; box-shadow:0 4px 16px rgba(0,0,0,.15); min-width:320px; }
+.toast-green { background:var(--green); }
+.toast-amber { background:var(--amber); }
+.toast-red { background:var(--red); }
+.toast-blue { background:var(--cascade-blue); }
+@keyframes toastIn { from{transform:translateX(100%);opacity:0} to{transform:translateX(0);opacity:1} }
+/* G-01: Exit confirmation dialog */
+.confirm-overlay { position:fixed; inset:0; background:rgba(0,0,0,.5); display:flex; align-items:center; justify-content:center; z-index:250; }
+.confirm-dialog { background:#fff; border-radius:10px; padding:28px; max-width:380px; width:90%; text-align:center; box-shadow:0 20px 60px rgba(0,0,0,.2); }
+.confirm-dialog h3 { font-size:17px; font-weight:700; color:var(--cascade-navy); margin-bottom:8px; }
+.confirm-dialog p { font-size:14px; color:var(--text-secondary); margin-bottom:20px; }
+.confirm-dialog .confirm-actions { display:flex; gap:10px; justify-content:center; }
+/* G-01: Splash close button */
+.splash-close { position:absolute; top:12px; right:12px; background:none; font-size:20px; color:var(--text-secondary); cursor:pointer; width:36px; height:36px; display:flex; align-items:center; justify-content:center; border-radius:50%; }
+.splash-close:hover { background:var(--surface); color:var(--text-primary); }
+.splash-card { position:relative; }
 </style>
 </head>
 <body>
@@ -316,11 +478,18 @@ const PACKING_SLIP = [
   {name:'DAFO EVA Foam 3mm Natural',sku:'DAFO-FM-3-NTL',poQty:200,psQty:200,match:true},
   {name:'PP Sheet 4mm White',sku:'PP-SHT-4-WHT',poQty:14,psQty:14,match:true},
   {name:'Velcro Strap Black 1"',sku:'STR-VLC-BLK-1',poQty:500,psQty:500,match:true},
-  {name:'EVA Foam 5mm Blue',sku:'DAFO-FM-5-BLU',poQty:100,psQty:100,match:true},
+  {name:'EVA Foam 5mm Blue',sku:'DAFO-FM-5-BLU',poQty:100,psQty:95,match:false},
   {name:'PP Sheet 3mm Clear',sku:'PP-SHT-3-CLR',poQty:8,psQty:8,match:true},
   {name:'Rivet 1/4" Steel',sku:'TX-RVT-250',poQty:1000,psQty:1000,match:true},
   {name:'Foam Adhesive A-12',sku:'ADH-FM-A12',poQty:24,psQty:24,match:true},
   {name:'Buffer Strip 2mm',sku:'BUF-STR-2MM',poQty:200,psQty:200,match:true},
+];
+const FERNDALE_ITEMS = [
+  {sku:'DAFO-FM-3-NTL',name:'DAFO EVA Foam 3mm Natural',onHand:12,min:85,status:'CRITICAL'},
+  {sku:'PP-SHT-4-WHT',name:'PP Sheet 4mm White',onHand:8,min:22,status:'CRITICAL'},
+  {sku:'STR-VLC-BLK-1',name:'Strapping Velcro Black 1"',onHand:210,min:200,status:'HEALTHY'},
+  {sku:'TX-RVT-250',name:'Textile Rivet 2.5mm',onHand:340,min:800,status:'CRITICAL'},
+  {sku:'DAFO-FM-5-BLU',name:'DAFO EVA Foam 5mm Blue',onHand:45,min:40,status:'HEALTHY'},
 ];
 const WH_LOCATIONS = [
   {id:'A1',cap:22},{id:'A2',cap:40},{id:'A3',cap:55},{id:'A4',cap:68},
@@ -381,35 +550,97 @@ function WizardSteps({steps,current}) {
   </React.Fragment>)}</div>;
 }
 
-function QRModal({onClose,onResult,context}) {
+function QRModal({onClose,onResult,context,actionLabel,actionColor,itemInfo}) {
   const [phase,setPhase] = useState('ready');
+  const [manualEntry,setManualEntry] = useState(false);
   const doScan = ()=>{ setPhase('scanning'); setTimeout(()=>setPhase('done'),1800); };
+  const info = itemInfo || {name:'DAFO EVA Foam 3mm Natural',sku:'DAFO-FM-3-NTL',location:'A2-03',onHand:212};
+  const actLabel = actionLabel || 'Confirm & Apply';
+  const actColor = actionColor || 'var(--cascade-blue)';
+
+  // G-02: Split-panel on scan success
+  if(phase==='done') return <div className="qr-modal-overlay" onClick={onClose}>
+    <div className="qr-split-modal" onClick={e=>e.stopPropagation()}>
+      <div className="qr-modal-header"><h3>📷 QR Scanned</h3><button onClick={onClose} style={{fontSize:20,background:'none',cursor:'pointer'}}>✕</button></div>
+      <div className="qr-split-body">
+        <div className="qr-split-left">
+          <div className="qr-info-card">
+            <h4>{info.name}</h4>
+            <div className="qr-info-row"><span>SKU</span><strong>{info.sku}</strong></div>
+            <div className="qr-info-row"><span>Location</span><strong>{info.location}</strong></div>
+            <div className="qr-info-row"><span>On Hand</span><strong>{info.onHand}</strong></div>
+          </div>
+          <p style={{fontSize:12,color:'var(--text-secondary)',marginTop:10}}>{context||''}</p>
+        </div>
+        <div className="qr-split-right">
+          <button className="qr-action-btn" style={{background:actColor}} onClick={()=>{onResult&&onResult();onClose();}}>
+            <span style={{fontSize:28}}>✅</span>
+            <span>{actLabel}</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>;
+
+  // Pre-scan: full-width camera
   return <div className="qr-modal-overlay" onClick={onClose}>
     <div className="qr-modal" onClick={e=>e.stopPropagation()}>
-      <div className="qr-modal-header"><h3>📷 Scan QR Code</h3><button onClick={onClose} style={{fontSize:20,background:'none'}}>✕</button></div>
+      <div className="qr-modal-header"><h3>📷 Scan QR Code</h3><button onClick={onClose} style={{fontSize:20,background:'none',cursor:'pointer'}}>✕</button></div>
       <p style={{padding:'10px 18px',fontSize:13,color:'var(--text-secondary)'}}>Point at any QR label — item, shelf, packing slip, or Kanban card</p>
-      {phase!=='done' && <div className="qr-camera" onClick={doScan}>
+      {!manualEntry && <div className="qr-camera" onClick={doScan}>
         <div className="qr-corners"/>
         {phase==='scanning' && <div className="qr-scanline"/>}
         <div className="qr-status">{phase==='ready'?'Tap to simulate scan':'Scanning...'}</div>
       </div>}
-      {phase==='done' && <div className="qr-result"><div className="qr-result-card">
-        <h4 style={{color:'var(--green)'}}>✅ QR SCANNED SUCCESSFULLY</h4>
-        <p style={{fontSize:13,marginTop:6}}>{context||'DAFO EVA Foam 3mm Natural'}</p>
-        <p style={{fontSize:12,color:'var(--text-secondary)'}}>SKU: DAFO-FM-3-NTL | Location: A2-03 | On Hand: 212</p>
-        <button className="btn-sm btn-blue mt-2" onClick={()=>{onResult&&onResult();onClose();}}> Confirm & Apply</button>
-      </div></div>}
+      {!manualEntry && <div style={{padding:'12px 18px',textAlign:'center'}}>
+        <button className="link" onClick={()=>setManualEntry(true)}>QR not working? Enter manually →</button>
+      </div>}
+      {manualEntry && <div style={{padding:'18px'}}>
+        <div className="form-field"><label>Enter PO / SKU / Location Code</label>
+          <input placeholder="e.g. PO-2026-0411 or DAFO-FM-3-NTL" style={{width:'100%',padding:'10px 14px',border:'1px solid var(--border)',borderRadius:7}}/>
+        </div>
+        <div className="flex gap-2">
+          <button className="btn-sm btn-blue" onClick={()=>setPhase('done')}>Look Up</button>
+          <button className="btn-sm btn-outline" onClick={()=>setManualEntry(false)}>Back to Camera</button>
+        </div>
+      </div>}
     </div>
   </div>;
 }
 
-function SplashScreen({icon,title,text,actions}) {
+function SplashScreen({icon,title,text,actions,onClose}) {
   return <div className="splash-overlay"><div className="splash-card">
+    {onClose && <button className="splash-close" onClick={onClose}>✕</button>}
     <div className="splash-icon">{icon}</div>
     <div className="splash-title">{title}</div>
     <div className="splash-text">{text}</div>
     <div className="splash-actions">{actions}</div>
   </div></div>;
+}
+
+// G-03: Toast notification component
+function Toast({message,type,onDone}) {
+  useEffect(()=>{const t=setTimeout(()=>onDone&&onDone(),4000);return ()=>clearTimeout(t);},[]);
+  return <div className={`toast toast-${type||'green'}`} role="alert" aria-live="assertive">{message}</div>;
+}
+
+// G-01: Exit confirmation dialog
+function ExitConfirmDialog({onCancel,onExit}) {
+  useEffect(()=>{
+    const handler=(e)=>{if(e.key==='Escape')onCancel();};
+    document.addEventListener('keydown',handler);
+    return ()=>document.removeEventListener('keydown',handler);
+  },[]);
+  return <div className="confirm-overlay" onClick={onCancel}>
+    <div className="confirm-dialog" role="alertdialog" aria-label="Exit without saving" onClick={e=>e.stopPropagation()}>
+      <h3>Exit without saving?</h3>
+      <p>Your progress will be lost.</p>
+      <div className="confirm-actions">
+        <button className="btn-sm btn-outline" onClick={onCancel}>Cancel</button>
+        <button className="btn-sm btn-red" onClick={onExit}>Exit</button>
+      </div>
+    </div>
+  </div>;
 }
 
 function StockBar({onHand,min}) {
@@ -480,59 +711,123 @@ function LoginScreen({onLogin}) {
 }
 
 // ==================== SCREEN 2: Warehouse Dashboard ====================
-function DashboardWM({nav}) {
-  const [dismissed,setDismissed]=useState(false);
+function DashboardWM({nav,openAlerts}) {
+  // D-02: Compute warehouse capacity from WH_LOCATIONS
+  const avgCap = Math.round(WH_LOCATIONS.reduce((s,l)=>s+l.cap,0)/WH_LOCATIONS.length);
+  const capColor = avgCap>=70?'var(--green)':avgCap>=50?'var(--amber)':'var(--red)';
+  const belowReorder = ITEMS.filter(i=>i.onHand<i.min).length;
+
   return <div>
-    {!dismissed && <div className="callout callout-blue flex-between" style={{marginBottom:16}}>
-      <span>Good morning, Peter. Pick what you need below — your warehouse tells you what's urgent today.</span>
-      <button onClick={()=>setDismissed(true)} style={{background:'none',fontSize:16,color:'var(--cascade-blue)'}}>✕</button>
-    </div>}
-    <div className="intel-card">
-      <div className="intel-label">⚡ DAFONow Intelligence</div>
-      <div className="intel-text">Production forecast: 142 DAFO units this week. EVA Foam 3mm and PP Sheet 4mm are below required levels for the full run. Suggest PO now — lead time 3 days from Pacific Foam.</div>
-      <div className="intel-cta"><button onClick={()=>nav('purchasing-view')}>Review Purchase Worksheet →</button></div>
+    {/* D-01: Intel Ribbon — compact 56px */}
+    <div className="intel-ribbon">
+      <div className="intel-ribbon-tab">⚡ DAFONow</div>
+      <div className="intel-ribbon-body">
+        <span><span className="item-critical">EVA Foam 3mm</span> and <span className="item-critical">PP Sheet 4mm</span> below required levels.</span>
+        <span className="sub-text">142 DAFO units forecast this week — suggest PO now.</span>
+      </div>
+      <div className="intel-ribbon-cta" onClick={()=>nav('purchasing-view')}>Review Purchase Worksheet →</div>
     </div>
-    <div className="kpi-row">
-      <div className="kpi-card"><div className="kpi-label">Items Below Reorder</div><div className="kpi-value">7</div><div className="kpi-trend red">↑ +2 from yesterday</div></div>
-      <div className="kpi-card"><div className="kpi-label">Open POs</div><div className="kpi-value">4</div><div className="kpi-trend amber">1 overdue</div></div>
-      <div className="kpi-card"><div className="kpi-label">Pending Transfers</div><div className="kpi-value">3</div><div className="kpi-trend amber">1 urgent</div></div>
-      <div className="kpi-card"><div className="kpi-label">Kanban Requests Today</div><div className="kpi-value">5</div><div className="kpi-trend green">All acknowledged</div></div>
-    </div>
-    <div className="quick-grid">
-      <div className="quick-tile" onClick={()=>nav('grn')}><div className="tile-icon">🚚</div><div className="tile-label">Receive a Truck</div><div className="tile-sub">Log inbound delivery</div></div>
-      <div className="quick-tile" onClick={()=>nav('transfers')}><div className="tile-icon">📦</div><div className="tile-label">Transfer to Ferndale</div><div className="tile-sub">Generate BOL</div></div>
-      <div className="quick-tile" onClick={()=>nav('inventory')}><div className="tile-icon">🔍</div><div className="tile-label">Inventory Lookup</div><div className="tile-sub">Scan or search items</div></div>
-      <div className="quick-tile" onClick={()=>nav('transfers')}><div className="tile-icon">📲</div><div className="tile-label">Pending Requests</div><div className="tile-sub">From Ferndale production</div></div>
-      <div className="quick-tile" onClick={()=>nav('cycle-count')}><div className="tile-icon">🔢</div><div className="tile-label">Cycle Count</div><div className="tile-sub">Verify physical stock</div></div>
-      <div className="quick-tile" onClick={()=>nav('purchasing-view')}><div className="tile-icon">📄</div><div className="tile-label">View Purchasing</div><div className="tile-sub">POs and reorder status</div></div>
-    </div>
-    <div className="grid-2-1">
-      <div className="card">
-        <div className="card-header"><span>Active Alerts</span><span className="link" onClick={()=>nav('alerts')}>View all 24 →</span></div>
-        {[
-          {sev:'red',title:'DAFO EVA Foam 3mm',desc:'12 units, 85 needed this week',rec:'Create PO: 200 units, Pacific Foam',btn:'Create PO'},
-          {sev:'red',title:'PP Sheet 4mm White',desc:'8 rolls, 22 needed, 5-day lead',rec:'Expedite order',btn:'Create PO'},
-          {sev:'red',title:'PO-2026-0412 Texas Steel',desc:'Overdue 3 days, 12 items',rec:'Call vendor or source alternative',btn:'View PO'},
-          {sev:'amber',title:'Velcro Strap Black 1"',desc:'2 days stock remaining',rec:'Add to next PO',btn:'Add to PO'},
-          {sev:'blue',title:'Pacific Foam truck today',desc:'ETA 2:30 PM, PO-2026-0411',rec:'8 line items ready',btn:'Receive'},
-        ].map((a,i)=><div className="alert-row" key={i}>
-          <div className={`severity-dot ${a.sev}`}/>
-          <div className="alert-content">
-            <div className="alert-title">{a.title}</div>
-            <div className="alert-desc">{a.desc}</div>
-            <div className="alert-rec">💡 {a.rec}</div>
+
+    {/* D-02: 5 compact horizontal KPI tiles (64px) + capacity battery */}
+    <div className="kpi-compact-row">
+      <div className={`kpi-compact${belowReorder>=5?' error':''}`} onClick={()=>nav('alerts')}>
+        <div className="kpi-icon">⚠️</div>
+        <div><div className="kpi-num">{belowReorder}</div><div className="kpi-meta">Below Reorder</div></div>
+        <div className="kpi-delta" style={{color:'var(--red)',marginLeft:'auto'}}>↑ +2</div>
+      </div>
+      <div className="kpi-compact" onClick={()=>nav('purchasing-view')}>
+        <div className="kpi-icon">📄</div>
+        <div><div className="kpi-num">4</div><div className="kpi-meta">Open POs</div></div>
+        <div className="kpi-delta" style={{color:'var(--amber)',marginLeft:'auto'}}>1 overdue</div>
+      </div>
+      <div className="kpi-compact" onClick={()=>nav('transfers')}>
+        <div className="kpi-icon">🚚</div>
+        <div><div className="kpi-num">3</div><div className="kpi-meta">Transfers</div></div>
+        <div className="kpi-delta" style={{color:'var(--amber)',marginLeft:'auto'}}>1 urgent</div>
+      </div>
+      <div className="kpi-compact">
+        <div className="kpi-icon">📲</div>
+        <div><div className="kpi-num">5</div><div className="kpi-meta">Kanban Today</div></div>
+        <div className="kpi-delta" style={{color:'var(--green)',marginLeft:'auto'}}>✅ All ack</div>
+      </div>
+      <div className="kpi-compact">
+        <div className="kpi-icon">🏭</div>
+        <div>
+          <div className="capacity-label">WAREHOUSE CAPACITY</div>
+          <div className="capacity-battery">
+            <div className="capacity-bar"><div className="capacity-fill" style={{width:`${avgCap}%`,background:capColor}}/></div>
+            <span style={{fontSize:13,fontWeight:700,color:capColor}}>{avgCap}%</span>
           </div>
-          <div className="alert-action"><button className="btn-sm btn-blue" onClick={()=>{if(a.btn==='Receive')nav('grn');else if(a.btn.includes('PO'))nav('purchasing-view');else if(a.btn==='View PO')nav('purchasing-view');}}>{a.btn}</button></div>
-        </div>)}
+        </div>
       </div>
-      <div className="card">
-        <div className="card-header">Pending Transfers from Ferndale</div>
-        {TRANSFERS.map((t,i)=><div key={i} style={{padding:'10px 0',borderBottom:i<2?'1px solid var(--border)':'none'}}>
-          <div className="flex-between"><span style={{fontWeight:600,fontSize:13}}>{t.id}</span><Badge status={t.urgency}/></div>
-          <div className="text-sm text-sec mt-2">{ITEMS.find(x=>x.sku===t.items)?.name||t.items}, {t.qty}</div>
-          <div className="mt-2">{t.status==='In Transit'?<Badge status="In Transit"/>:<button className="btn-sm btn-blue" onClick={()=>nav('transfers')}>Start Pick</button>}</div>
-        </div>)}
+    </div>
+
+    {/* D-03: Quick Tiles with status badges */}
+    <div className="quick-grid">
+      <div className="quick-tile" onClick={()=>nav('grn')}>
+        <div className="tile-icon">🚚</div><div className="tile-label">Receive a Truck</div><div className="tile-sub">Log inbound delivery</div>
+        <div className="tile-badge" style={{background:'var(--cascade-blue-light)',color:'var(--cascade-blue)'}}>PO-0411 arriving 2:30 PM</div>
       </div>
+      <div className="quick-tile" onClick={()=>nav('transfers')}>
+        <div className="tile-icon">📦</div><div className="tile-label">Transfer to Ferndale</div><div className="tile-sub">Generate BOL</div>
+        <div className="tile-badge" style={{background:'var(--amber-light)',color:'var(--amber)'}}>3 pending requests</div>
+      </div>
+      <div className="quick-tile" onClick={()=>nav('inventory')}>
+        <div className="tile-icon">🔍</div><div className="tile-label">Inventory Lookup</div><div className="tile-sub">Scan or search items</div>
+      </div>
+      <div className="quick-tile" onClick={()=>nav('transfers')}>
+        <div className="tile-icon">📲</div><div className="tile-label">Pending Requests</div><div className="tile-sub">From Ferndale production</div>
+        <div className="tile-badge" style={{background:'var(--red-light)',color:'var(--red)'}}>1 urgent</div>
+      </div>
+      <div className="quick-tile" onClick={()=>nav('cycle-count')}>
+        <div className="tile-icon">🔢</div><div className="tile-label">Cycle Count</div><div className="tile-sub">Verify physical stock</div>
+        <div className="tile-badge" style={{background:'var(--red-light)',color:'var(--red)'}}>A-Zone due today</div>
+      </div>
+      <div className="quick-tile" onClick={()=>nav('purchasing-view')}>
+        <div className="tile-icon">📄</div><div className="tile-label">View Purchasing</div><div className="tile-sub">POs and reorder status</div>
+      </div>
+    </div>
+
+    {/* D-04: Active Alerts — 3-column card grid with 4 icon actions */}
+    <div className="card-header" style={{marginBottom:10}}><span>Active Alerts</span><span className="link" onClick={()=>openAlerts&&openAlerts()}>View all 24 →</span></div>
+    <div className="alert-card-grid">
+      {[
+        {sev:'red',title:'EVA Foam 3mm — STOCKOUT',desc:'12 units on hand, 85 needed. 0 on order.'},
+        {sev:'red',title:'PP Sheet 4mm — CRITICAL',desc:'8 rolls, 22 needed, 5-day lead time.'},
+        {sev:'red',title:'PO-0412 Texas Steel — OVERDUE',desc:'3 days overdue. 12 items, no delivery.'},
+        {sev:'amber',title:'Velcro Strap — LOW',desc:'210 units, reorder 300. 2 days left.'},
+        {sev:'amber',title:'EVA Foam 5mm Blue — LOW',desc:'45 units, reorder 80. 4 days left.'},
+        {sev:'blue',title:'Pacific Foam truck — TODAY',desc:'ETA 2:30 PM, PO-0411, 8 items.'},
+      ].map((a,i)=><div className="alert-card" key={i}>
+        <div className={`alert-card-bar ${a.sev}`}/>
+        <div className="alert-card-body">
+          <div className="alert-card-title">{a.title}</div>
+          <div className="alert-card-desc">{a.desc}</div>
+        </div>
+        <div className="alert-card-actions">
+          {/* NAV-01: WM role → purchasing-view with callout; Purchasing role → purchasing-mgmt */}
+          <button onClick={()=>nav('purchasing-view')} title="Create PO"><span>➕</span><span>Create PO</span></button>
+          <button onClick={()=>nav('inventory')} title="View" aria-label="View item"><span>👁</span><span>View</span></button>
+          <button onClick={()=>nav('grn')} title="Receive" aria-label="Receive goods"><span>📥</span><span>Receive</span></button>
+          <button onClick={()=>nav('purchasing-view')} title="Add to Worksheet" aria-label="Add to purchase worksheet"><span>📋</span><span>Worksheet</span></button>
+        </div>
+      </div>)}
+    </div>
+
+    {/* D-05: Pending Transfers — mini cards */}
+    <div className="card-header" style={{marginBottom:10}}>Pending Transfers from Ferndale</div>
+    <div className="grid-3">
+      {TRANSFERS.map((t,i)=><div className="transfer-mini-card" key={i}>
+        <div className="transfer-mini-header">
+          <span className="req-id">{t.id}</span>
+          <Badge status={t.urgency}/>
+        </div>
+        <div className="transfer-mini-item">{ITEMS.find(x=>x.sku===t.items)?.name||t.items} — {t.qty}</div>
+        <div className="transfer-mini-footer">
+          <span className="stock-avail">✅ {t.avail}</span>
+          {t.status==='Awaiting Pick'?<button className="btn-sm btn-blue" onClick={()=>nav('transfers')}>Start Pick</button>:<Badge status="In Transit"/>}
+        </div>
+      </div>)}
     </div>
   </div>;
 }
@@ -569,18 +864,20 @@ function AlertsScreen({nav}) {
 }
 
 // ==================== SCREEN 4: GRN Wizard ====================
-function GRNScreen({nav}) {
+function GRNScreen({nav,addToast,setWizardActive}) {
   const [step,setStep]=useState(-1);
+  useEffect(()=>{setWizardActive&&setWizardActive(step>=0);return()=>{setWizardActive&&setWizardActive(false);};},[step]);
   const [scanned,setScanned]=useState({});
   const [qcStatus,setQcStatus]=useState({});
   const [locations,setLocations]=useState({});
   const [showQR,setShowQR]=useState(false);
-  const [splash,setSplash]=useState(false);
+  const [showExitConfirm,setShowExitConfirm]=useState(false);
+  const [mismatchNotes,setMismatchNotes]=useState({});
   const stepNames = ['Identify','Match PO','QR & QC','Put-Away','Confirm'];
   const scanCount = Object.keys(scanned).length;
-
-  if(splash) return <SplashScreen icon="✅" title="GRN-2026-0089 Complete!" text="8 items received, 1 flagged for QC review. Blaine inventory updated. Packing slip automatically routed to Purchasing."
-    actions={<><button className="btn-sm btn-blue" onClick={()=>{setSplash(false);setStep(-1);}}>Receive Another Truck</button><button className="btn-sm btn-outline" onClick={()=>alert('GRN-2026-0089 label sent to printer.')}>Print GRN Label</button></>}/>;
+  const hasMismatch = PACKING_SLIP.some(p=>!p.match);
+  const mismatchItems = PACKING_SLIP.filter(p=>!p.match);
+  const allMismatchesFlagged = mismatchItems.every((_,i)=>mismatchNotes[PACKING_SLIP.indexOf(mismatchItems[i])]);
 
   if(step===-1) return <div>
     <div className="card"><div className="card-header">Expected Deliveries</div>
@@ -594,7 +891,8 @@ function GRNScreen({nav}) {
 
   return <div>
     <WizardSteps steps={stepNames} current={step}/>
-    {showQR && <QRModal onClose={()=>setShowQR(false)} onResult={()=>{}} context="PO-2026-0411 — Pacific Foam Supplies"/>}
+    {showQR && <QRModal onClose={()=>setShowQR(false)} onResult={()=>{}} context="PO-2026-0411 — Pacific Foam Supplies" actionLabel="Confirm Receipt" actionColor="var(--green)"/>}
+    {showExitConfirm && <ExitConfirmDialog onCancel={()=>setShowExitConfirm(false)} onExit={()=>{setShowExitConfirm(false);setStep(-1);setScanned({});setQcStatus({});setLocations({});setMismatchNotes({});}}/>}
 
     {step===0 && <div className="card">
       <h3 style={{marginBottom:16}}>Step 1 — Identify Shipment</h3>
@@ -610,14 +908,19 @@ function GRNScreen({nav}) {
 
     {step===1 && <div className="card">
       <h3 style={{marginBottom:16}}>Step 2 — Match Packing Slip</h3>
-      <table className="data-table"><thead><tr><th>Item</th><th>SKU</th><th>PO Qty</th><th>Packing Slip Qty</th><th>Match</th></tr></thead>
-      <tbody>{PACKING_SLIP.map((p,i)=><tr key={i}><td>{p.name}</td><td><span className="badge badge-gray">{p.sku}</span></td><td>{p.poQty}</td><td>{p.psQty}</td><td><span className="badge badge-green">✅ Match</span></td></tr>)}</tbody></table>
-      <div className="wizard-nav"><button className="btn-sm btn-outline" onClick={()=>setStep(0)}>← Back</button><button className="btn-sm btn-blue" onClick={()=>setStep(2)}>Next →</button></div>
+      <div className="callout callout-blue mb-4">{PACKING_SLIP.filter(p=>p.match).length}/{PACKING_SLIP.length} matched{hasMismatch&&' — ⚠️ mismatch found, flag required before proceeding'}</div>
+      <table className="data-table"><thead><tr><th>Item</th><th>SKU</th><th>PO Qty</th><th>Packing Slip Qty</th><th>Match</th><th>Note</th></tr></thead>
+      <tbody>{PACKING_SLIP.map((p,i)=><tr key={i} style={!p.match?{background:'var(--red-light)',borderLeft:'3px solid var(--red)'}:{}}>
+        <td>{p.name}</td><td><span className="badge badge-gray">{p.sku}</span></td><td>{p.poQty}</td><td>{p.psQty}</td>
+        <td>{p.match?<span className="badge badge-green">✅ Match</span>:<span className="badge badge-red">⚠️ Mismatch ({p.poQty-p.psQty} short)</span>}</td>
+        <td>{!p.match?<input placeholder="Flag reason required..." value={mismatchNotes[i]||''} onChange={e=>setMismatchNotes({...mismatchNotes,[i]:e.target.value})} style={{padding:'6px 10px',border:'1px solid var(--red)',borderRadius:6,fontSize:12,width:180}}/>:'—'}</td>
+      </tr>)}</tbody></table>
+      <div className="wizard-nav"><button className="btn-sm btn-outline" onClick={()=>setStep(0)}>← Back</button><button className="btn-sm btn-outline" onClick={()=>setShowExitConfirm(true)}>✕ Cancel</button><button className={`btn-sm ${(!hasMismatch||allMismatchesFlagged)?'btn-blue':'btn-outline'}`} disabled={hasMismatch&&!allMismatchesFlagged} onClick={()=>setStep(2)}>Next → {hasMismatch&&!allMismatchesFlagged?'(flag mismatches first)':''}</button></div>
     </div>}
 
     {step===2 && <div className="card">
       <h3 style={{marginBottom:16}}>Step 3 — QR Scan & QC Inspection</h3>
-      <div className="mb-4 text-sm text-sec">{scanCount}/8 items scanned</div>
+      <div className="mb-4 text-sm text-sec">{scanCount}/{PACKING_SLIP.length} items scanned</div>
       {PACKING_SLIP.map((p,i)=><div key={i} className="flex-between" style={{padding:'10px 0',borderBottom:'1px solid var(--border)'}}>
         <div className="flex items-center gap-3">
           <div style={{width:10,height:10,borderRadius:'50%',background:scanned[i]?'var(--green)':'var(--border)'}}/>
@@ -625,30 +928,62 @@ function GRNScreen({nav}) {
         </div>
         <div className="flex gap-2">
           {scanned[i]?<>
-            <button className={`btn-sm ${qcStatus[i]==='pass'?'btn-green':'btn-outline'}`} onClick={()=>setQcStatus({...qcStatus,[i]:'pass'})}>✅ Pass</button>
-            <button className={`btn-sm ${qcStatus[i]==='flag'?'btn-amber':'btn-outline'}`} onClick={()=>setQcStatus({...qcStatus,[i]:'flag'})}>⚠️ Flag</button>
-          </>:<button className="btn-sm btn-blue" onClick={()=>{setScanned({...scanned,[i]:true});setQcStatus({...qcStatus,[i]:'pass'});}}>📷 Scan & Receive</button>}
+            <button className={`btn-sm ${qcStatus[i]==='pass'?'btn-green':'btn-outline'}`} onClick={()=>setQcStatus({...qcStatus,[i]:'pass'})}>✅ QC Pass</button>
+            <button className={`btn-sm ${qcStatus[i]==='flag'?'btn-amber':'btn-outline'}`} onClick={()=>setQcStatus({...qcStatus,[i]:'flag'})}>⚠️ Flag Issue</button>
+          </>:<button className="btn-sm btn-blue" onClick={()=>{
+            setShowQR(true);
+            /* GRN-02: On scan result, mark item scanned but require explicit QC tap */
+            const origResult = ()=>{setScanned(prev=>({...prev,[i]:true}));setShowQR(false);};
+            setShowQR(i);
+          }}>📷 Scan Item</button>}
         </div>
       </div>)}
-      <div className="wizard-nav"><button className="btn-sm btn-outline" onClick={()=>setStep(1)}>← Back</button><button className={`btn-sm ${scanCount>=8?'btn-blue':'btn-outline'}`} disabled={scanCount<1} onClick={()=>setStep(3)}>Next → {scanCount<8?`(${scanCount}/8 scanned)`:''}</button></div>
+      {/* GRN-02: Split-panel QC modal for item scan */}
+      {typeof showQR==='number' && <QRModal
+        onClose={()=>setShowQR(false)}
+        onResult={()=>{setScanned(prev=>({...prev,[showQR]:true}));setShowQR(false);}}
+        context={`${PACKING_SLIP[showQR]?.name} — ${PACKING_SLIP[showQR]?.poQty} units`}
+        actionLabel="Confirm Receipt"
+        actionColor="var(--green)"
+        itemInfo={{name:PACKING_SLIP[showQR]?.name,sku:PACKING_SLIP[showQR]?.sku,location:ITEMS.find(x=>x.sku===PACKING_SLIP[showQR]?.sku)?.loc||'—',onHand:PACKING_SLIP[showQR]?.psQty}}
+      />}
+      <div className="wizard-nav"><button className="btn-sm btn-outline" onClick={()=>setStep(1)}>← Back</button><button className="btn-sm btn-outline" onClick={()=>setShowExitConfirm(true)}>✕ Cancel</button><button className={`btn-sm ${scanCount>=1?'btn-blue':'btn-outline'}`} disabled={scanCount<1} onClick={()=>setStep(3)}>Next → {scanCount<PACKING_SLIP.length?`(${scanCount}/${PACKING_SLIP.length} scanned)`:''}</button></div>
     </div>}
 
     {step===3 && <div className="card">
       <h3 style={{marginBottom:16}}>Step 4 — Assign Put-Away Locations</h3>
-      <div className="callout callout-blue mb-4">Select a warehouse location for each item. Suggested locations shown first.</div>
-      <div className="wh-grid">
-        {WH_LOCATIONS.map(l=><div key={l.id} className={`wh-cell ${l.cap>95?'full':l.cap>80?'near-full':'available'}${locations.selected===l.id?' selected':''}`}
-          onClick={()=>l.cap<=95&&setLocations({...locations,selected:l.id})}>
-          {l.id}<br/><span style={{fontSize:10}}>{l.cap}%</span>
-        </div>)}
+      <div className="callout callout-blue mb-4">Click a location cell to assign items. Green = available, amber = near full, grey = full (not selectable).</div>
+      {/* GRN-03: Enhanced warehouse grid */}
+      <div className="wh-grid-enhanced">
+        {WH_LOCATIONS.map(l=>{
+          const isFull=l.cap>90;const isNear=l.cap>60;const isConfirmed=locations[l.id]==='confirmed';const isSelected=locations.selected===l.id;
+          return <div key={l.id} className={`wh-cell-v2 ${isConfirmed?'confirmed':isSelected?'selected':isFull?'full':isNear?'near-full':'avail'}`}
+            onClick={()=>!isFull&&!isConfirmed&&setLocations({...locations,selected:l.id})}>
+            <div className="cell-label">{l.id}</div>
+            <div className="cell-pct">{l.cap}% occupied</div>
+            {isConfirmed&&<div className="cell-tag">✓ Confirmed</div>}
+            {isFull&&!isConfirmed&&<div className="cell-tag">Full</div>}
+          </div>;
+        })}
       </div>
-      {PACKING_SLIP.slice(0,4).map((p,i)=><div key={i} className="flex-between" style={{padding:'8px 0',borderBottom:'1px solid var(--border)'}}>
-        <span style={{fontSize:13}}>{p.name}</span>
-        <select style={{padding:'6px 10px',border:'1px solid var(--border)',borderRadius:7,fontSize:13}}>
-          <option>A2-03 (Suggested)</option><option>A1</option><option>C1</option><option>D1</option>
-        </select>
-      </div>)}
-      <div className="wizard-nav"><button className="btn-sm btn-outline" onClick={()=>setStep(2)}>← Back</button><button className="btn-sm btn-blue" onClick={()=>setStep(4)}>Next →</button></div>
+      {/* GRN-03: Cell expand panel */}
+      {locations.selected && !locations[locations.selected] && <div className="wh-expand-panel">
+        <h4>{locations.selected} — {WH_LOCATIONS.find(l=>l.id===locations.selected)?.cap}% occupied</h4>
+        <p style={{fontSize:13,color:'var(--text-secondary)',marginBottom:12}}>Suggested for: {PACKING_SLIP[0]?.name}</p>
+        <div className="flex gap-2">
+          <button className="btn-sm btn-blue" onClick={()=>setLocations({...locations,[locations.selected]:'assigned',qrConfirm:locations.selected})}>Assign Items to This Location</button>
+          <button className="btn-sm btn-outline" onClick={()=>setLocations({...locations,selected:null})}>Cancel</button>
+        </div>
+      </div>}
+      {/* GRN-03: QR Confirmation sub-step */}
+      {locations.qrConfirm && !locations[locations.qrConfirm+'_done'] && <div className="callout callout-amber mt-4">
+        <p style={{fontWeight:600,marginBottom:8}}>Scan the QR label at location {locations.qrConfirm} to confirm items placed correctly.</p>
+        <div className="flex gap-2">
+          <button className="btn-sm btn-blue" onClick={()=>{setLocations({...locations,[locations.qrConfirm]:'confirmed',[locations.qrConfirm+'_done']:true,qrConfirm:null,selected:null});}}>📷 Simulate QR Scan</button>
+          <button className="btn-sm btn-outline" onClick={()=>{setLocations({...locations,[locations.qrConfirm]:'confirmed',[locations.qrConfirm+'_done']:true,qrConfirm:null,selected:null});}}>No QR label — Confirm Manually</button>
+        </div>
+      </div>}
+      <div className="wizard-nav"><button className="btn-sm btn-outline" onClick={()=>setStep(2)}>← Back</button><button className="btn-sm btn-outline" onClick={()=>setShowExitConfirm(true)}>✕ Cancel</button><button className="btn-sm btn-blue" onClick={()=>setStep(4)}>Next →</button></div>
     </div>}
 
     {step===4 && <div className="card">
@@ -663,7 +998,7 @@ function GRNScreen({nav}) {
         <div className="detail-row"><span className="text-sec">Locations Confirmed</span><strong>Yes</strong></div>
       </div>
       <div className="form-field mt-4"><label>Notes (optional)</label><textarea style={{width:'100%',padding:10,border:'1px solid var(--border)',borderRadius:7,minHeight:60}} placeholder="Add any notes..."/></div>
-      <div className="wizard-nav"><button className="btn-sm btn-outline" onClick={()=>setStep(3)}>← Back</button><button className="btn-sm btn-green" style={{padding:'12px 28px',fontSize:15}} onClick={()=>setSplash(true)}>✅ Generate GRN & Update Inventory</button></div>
+      <div className="wizard-nav"><button className="btn-sm btn-outline" onClick={()=>setStep(3)}>← Back</button><button className="btn-sm btn-green" style={{padding:'12px 28px',fontSize:15}} onClick={()=>{addToast&&addToast('✅ GRN-2026-0089 complete — inventory updated.','green');nav&&nav('dashboard');}}>✅ Generate GRN & Update Inventory</button></div>
     </div>}
   </div>;
 }
@@ -673,7 +1008,14 @@ function InventoryScreen({nav}) {
   const [search,setSearch]=useState('');
   const [detail,setDetail]=useState(null);
   const [showQR,setShowQR]=useState(false);
+  const [invTab,setInvTab]=useState('items');
   const filtered = ITEMS.filter(i=>!search||i.name.toLowerCase().includes(search.toLowerCase())||i.sku.toLowerCase().includes(search.toLowerCase()));
+
+  // INV-01: Compute transfer opportunities
+  const transferOpps = FERNDALE_ITEMS.filter(f=>f.status==='CRITICAL').map(f=>{
+    const blaine = ITEMS.find(b=>b.sku===f.sku);
+    return blaine?{...f,blaineName:blaine.name,blaineOnHand:blaine.onHand,surplus:blaine.onHand-blaine.min}:null;
+  }).filter(Boolean);
 
   if(detail) return <div className="card item-detail">
     <button className="link mb-4" onClick={()=>setDetail(null)}>← Back to Inventory</button>
@@ -694,96 +1036,190 @@ function InventoryScreen({nav}) {
       </div>
     </div>
     <div className="flex gap-2 mt-4">
-      <button className="btn-sm btn-blue" onClick={()=>nav&&nav('transfers')}>📦 Transfer to Ferndale</button>
+      {/* INV-02: Consolidated transfer entry point — navigates to Transfers with item pre-populated */}
+      <button className="btn-sm btn-blue" onClick={()=>nav&&nav('transfers',{sku:detail.sku,name:detail.name,onHand:detail.onHand})}>📦 Transfer to Ferndale</button>
       <button className="btn-sm btn-outline" onClick={()=>alert('Quantity adjustment saved.')}>Adjust Quantity</button>
       <button className="btn-sm btn-outline" onClick={()=>alert('QR label sent to printer.')}>🖨 Print QR Label</button>
     </div>
   </div>;
 
   return <div>
-    {showQR && <QRModal onClose={()=>setShowQR(false)} onResult={()=>setDetail(ITEMS[0])}/>}
+    {showQR && <QRModal onClose={()=>setShowQR(false)} onResult={()=>setDetail(ITEMS[0])} actionLabel="View Item Details" actionColor="var(--cascade-blue)"/>}
     <div className="flex gap-3 mb-4">
       <input className="topbar-search" style={{flex:1,width:'auto'}} placeholder="🔍 Search by item name or SKU..." value={search} onChange={e=>setSearch(e.target.value)}/>
-      <button className="btn-sm btn-blue" onClick={()=>setShowQR(true)}>📷 Scan QR</button>
+      {/* INV-03: Updated QR button label */}
+      <button className="btn-sm btn-blue" onClick={()=>setShowQR(true)}>📷 Scan Item QR</button>
       <button className="btn-sm btn-outline" onClick={()=>{const el=document.createElement('div');el.style.cssText='position:fixed;bottom:20px;right:20px;background:var(--cascade-blue);color:#fff;padding:12px 20px;border-radius:8px;z-index:999;font-size:13px;';el.textContent='Filter applied: All items';document.body.appendChild(el);setTimeout(()=>el.remove(),3000);}}>Filter</button>
     </div>
-    <div className="callout callout-blue mb-4">Scan any QR label — shelf, item, packing slip, or Kanban card — to instantly pull up stock level, location, and recent movements.</div>
-    <div className="card">
+    {/* INV-03: Context line below search */}
+    <div className="callout callout-blue mb-4">📷 Scan any QR label — shelf, item, packing slip, or Kanban card — to instantly pull up stock level, location, and recent movements.</div>
+
+    {/* INV-01: Tab bar — Item List + Facility View */}
+    <div className="tab-bar">
+      <div className={`tab-item${invTab==='items'?' active':''}`} onClick={()=>setInvTab('items')}>Item List</div>
+      <div className={`tab-item${invTab==='facility'?' active':''}`} onClick={()=>setInvTab('facility')}>Facility View</div>
+    </div>
+
+    {invTab==='items' && <div className="card">
       <table className="data-table"><thead><tr><th>Item</th><th>SKU</th><th>Location</th><th>On Hand</th><th>Stock Level</th><th>Status</th></tr></thead>
       <tbody>{filtered.map((it,i)=><tr key={i} onClick={()=>setDetail(it)} style={{cursor:'pointer'}}>
         <td style={{fontWeight:600}}>{it.name}</td><td><span className="badge badge-gray">{it.sku}</span></td><td>{it.loc}</td><td>{it.onHand}</td>
         <td><StockBar onHand={it.onHand} min={it.min}/></td><td><Badge status={it.status}/></td>
       </tr>)}</tbody></table>
-    </div>
+    </div>}
+
+    {/* INV-01: Facility View — Blaine vs Ferndale comparison */}
+    {invTab==='facility' && <div>
+      <div className="facility-view">
+        <div className="facility-panel">
+          <h3>BLAINE WAREHOUSE</h3>
+          {ITEMS.filter(it=>FERNDALE_ITEMS.find(f=>f.sku===it.sku)).map((it,i)=>{
+            const pct=Math.min(100,Math.round((it.onHand/Math.max(it.min*3,1))*100));
+            const thresholdPct=Math.round((it.min/(it.min*3))*100);
+            const barColor=it.onHand>=it.min?'var(--green)':it.onHand>=it.min*0.5?'var(--amber)':'var(--red)';
+            return <div className="facility-item-row" key={i}>
+              <div className="facility-item-name">{it.name}</div>
+              <div className="facility-bar-wrap">
+                <div className="facility-bar-fill" style={{width:`${pct}%`,background:barColor}}><span>{it.onHand}</span></div>
+                <div className="facility-threshold" style={{left:`${thresholdPct}%`}} title={`Min: ${it.min}`}/>
+                <div className="facility-bar-qty">/ min {it.min}</div>
+              </div>
+            </div>;
+          })}
+        </div>
+        <div className="facility-panel">
+          <h3>FERNDALE PRODUCTION</h3>
+          {FERNDALE_ITEMS.map((f,i)=>{
+            const pct=Math.min(100,Math.round((f.onHand/Math.max(f.min*3,1))*100));
+            const thresholdPct=Math.round((f.min/(f.min*3))*100);
+            const barColor=f.status==='HEALTHY'?'var(--green)':'var(--red)';
+            return <div className="facility-item-row" key={i}>
+              <div className="facility-item-name">{f.name}</div>
+              <div className="facility-bar-wrap">
+                <div className="facility-bar-fill" style={{width:`${pct}%`,background:barColor}}><span>{f.onHand}</span></div>
+                <div className="facility-threshold" style={{left:`${thresholdPct}%`}} title={`Min: ${f.min}`}/>
+                <div className="facility-bar-qty">/ min {f.min}</div>
+              </div>
+            </div>;
+          })}
+        </div>
+      </div>
+      {/* INV-01: Transfer Opportunities */}
+      {transferOpps.length>0 && <div className="transfer-opportunities">
+        <h3>Transfer Opportunities</h3>
+        {transferOpps.map((t,i)=><div className="transfer-opp-row" key={i}>
+          <div>
+            <div style={{fontWeight:600,fontSize:13}}>{t.name}</div>
+            <div className="text-sm text-sec">Ferndale: <span style={{color:'var(--red)',fontWeight:600}}>{t.onHand}</span> (critical) / Blaine has {t.blaineOnHand} surplus</div>
+          </div>
+          {/* INV-02: Consolidated transfer entry point with item pre-populated */}
+          <button className="btn-sm btn-blue" onClick={()=>nav&&nav('transfers',{sku:t.sku,name:t.name,onHand:t.blaineOnHand})}>Initiate Transfer →</button>
+        </div>)}
+      </div>}
+      <div className="text-sm text-sec mt-4" style={{textAlign:'center'}}>3 locations: Blaine Warehouse | Blaine Floor | Ferndale Production</div>
+    </div>}
   </div>;
 }
 
 // ==================== SCREEN 6: Transfers ====================
-function TransfersScreen({readOnly}) {
+function TransfersScreen({readOnly,nav,addToast,setWizardActive,preSelectedItem}) {
   const [tab,setTab]=useState('pending');
   const [wizStep,setWizStep]=useState(-1);
+  useEffect(()=>{setWizardActive&&setWizardActive(wizStep>=0);return()=>{setWizardActive&&setWizardActive(false);};},[wizStep]);
   const [picked,setPicked]=useState({});
-  const [showQR,setShowQR]=useState(false);
-  const [splash,setSplash]=useState(false);
   const [dispatched,setDispatched]=useState(false);
-  const stepNames=['Pick List','Scan to Pick','Generate BOL','Dispatch','Status'];
+  const [showExitConfirm,setShowExitConfirm]=useState(false);
+  const [scanFlash,setScanFlash]=useState(null);
+  // TRF-01: Revised 5-step flow
+  const stepNames=['Review Request','Create Transfer Order','Pick Against Order','Generate BOL','Dispatch'];
+  // TRF-03: Multi-item pick list (2 items from first 2 Awaiting Pick transfers)
+  const pickItems = [
+    {name:'DAFO EVA Foam 3mm Natural',sku:'DAFO-FM-3-NTL',qty:'40 units',loc:'A2-03'},
+    {name:'PP Sheet 4mm White',sku:'PP-SHT-4-WHT',qty:'6 rolls',loc:'B1-01'},
+  ];
+  const pickedCount = Object.keys(picked).length;
+  const allPicked = pickedCount>=pickItems.length;
 
-  if(splash) return <SplashScreen icon="📦" title="BOL-2026-043 Dispatched!" text="Transfer dispatched to Ferndale. Estimated arrival ~45 minutes. Ferndale will be notified to confirm receipt."
-    actions={<><button className="btn-sm btn-blue" onClick={()=>{setSplash(false);setWizStep(-1);setDispatched(true);}}>Back to Transfers</button></>}/>;
+  // TRF-02: Auto-confirm scan pick — 0.5s green flash then return to list
+  const handleScanPick = (idx)=>{
+    setScanFlash(idx);
+    setTimeout(()=>{setPicked(prev=>({...prev,[idx]:true}));setScanFlash(null);},800);
+  };
 
   if(wizStep>=0) return <div>
-    {showQR && <QRModal onClose={()=>setShowQR(false)} onResult={()=>setPicked({0:true})} context="DAFO-FM-3-NTL at A2-03"/>}
+    {showExitConfirm && <ExitConfirmDialog onCancel={()=>setShowExitConfirm(false)} onExit={()=>{setShowExitConfirm(false);setWizStep(-1);setPicked({});}}/>}
     <WizardSteps steps={stepNames} current={wizStep}/>
 
+    {/* TRF-01 Step 1: Review Request */}
     {wizStep===0 && <div className="card">
-      <h3 style={{marginBottom:16}}>Step 1 — Pick List</h3>
-      <div className="callout callout-blue mb-4">Auto-generated from Kanban request REQ-2026-0089</div>
-      <table className="data-table"><thead><tr><th>Item</th><th>SKU</th><th>Qty</th><th>Location</th><th>Status</th></tr></thead>
-      <tbody><tr><td>DAFO EVA Foam 3mm Natural</td><td><span className="badge badge-gray">DAFO-FM-3-NTL</span></td><td>40 units</td><td>A2-03</td><td><Badge status="Pending"/></td></tr></tbody></table>
-      <div className="wizard-nav"><button className="btn-sm btn-outline" onClick={()=>setWizStep(-1)}>← Back to Queue</button><button className="btn-sm btn-blue" onClick={()=>setWizStep(1)}>All clear — Begin Picking →</button></div>
+      <h3 style={{marginBottom:16}}>Step 1 — Review Transfer Request</h3>
+      <div className="callout callout-blue mb-4">Reviewing Kanban requests REQ-2026-0089 + REQ-2026-0090 from Ferndale Production.</div>
+      <table className="data-table"><thead><tr><th>Request</th><th>Item</th><th>Qty</th><th>Urgency</th><th>Blaine Stock</th></tr></thead>
+      <tbody>
+        <tr><td style={{fontWeight:600}}>REQ-2026-0089</td><td>DAFO EVA Foam 3mm Natural</td><td>40 units</td><td><Badge status="Urgent"/></td><td>✅ 212 available</td></tr>
+        <tr><td style={{fontWeight:600}}>REQ-2026-0090</td><td>PP Sheet 4mm White</td><td>6 rolls</td><td><Badge status="Pending"/></td><td>✅ 8 available</td></tr>
+      </tbody></table>
+      <div className="wizard-nav"><button className="btn-sm btn-outline" onClick={()=>setWizStep(-1)}>← Back to Queue</button><button className="btn-sm btn-outline" onClick={()=>setShowExitConfirm(true)}>✕ Cancel</button><button className="btn-sm btn-blue" onClick={()=>setWizStep(1)}>Create Transfer Order →</button></div>
     </div>}
 
+    {/* TRF-01 Step 2: Create Transfer Order */}
     {wizStep===1 && <div className="card">
-      <h3 style={{marginBottom:16}}>Step 2 — Scan to Confirm Pick</h3>
-      <div className="mb-4 text-sm text-sec">{Object.keys(picked).length}/1 items picked</div>
-      <div className="flex-between" style={{padding:14,background:picked[0]?'var(--green-light)':'var(--surface)',borderRadius:8}}>
-        <div><strong>DAFO EVA Foam 3mm Natural</strong><div className="text-sm text-sec">DAFO-FM-3-NTL — 40 units — A2-03</div></div>
-        {picked[0]?<Badge status="Complete"/>:<button className="btn-sm btn-blue" onClick={()=>setShowQR(true)}>📷 Scan to Pick</button>}
+      <h3 style={{marginBottom:16}}>Step 2 — Create Transfer Order</h3>
+      <div style={{background:'var(--green-light)',border:'2px solid var(--green)',borderRadius:8,padding:18,textAlign:'center',marginBottom:16}}>
+        <div style={{fontSize:18,fontWeight:700,color:'var(--green)'}}>TO-2026-0044</div>
+        <div className="text-sm text-sec mt-2">Transfer Order Created — Anchor Document</div>
       </div>
-      <div className="wizard-nav"><button className="btn-sm btn-outline" onClick={()=>setWizStep(0)}>← Back</button><button className={`btn-sm ${picked[0]?'btn-blue':'btn-outline'}`} disabled={!picked[0]} onClick={()=>setWizStep(2)}>All Picked →</button></div>
+      <div style={{background:'var(--surface)',borderRadius:8,padding:18}}>
+        <div className="detail-row"><span className="text-sec">From</span><strong>Blaine Warehouse</strong></div>
+        <div className="detail-row"><span className="text-sec">To</span><strong>Ferndale Production</strong></div>
+        <div className="detail-row"><span className="text-sec">Items</span><strong>2 line items</strong></div>
+        <div className="detail-row"><span className="text-sec">Requests</span><strong>REQ-2026-0089, REQ-2026-0090</strong></div>
+        <div className="detail-row"><span className="text-sec">Created By</span><strong>Peter Visser</strong></div>
+      </div>
+      <div className="wizard-nav"><button className="btn-sm btn-outline" onClick={()=>setWizStep(0)}>← Back</button><button className="btn-sm btn-blue" onClick={()=>setWizStep(2)}>Begin Picking →</button></div>
     </div>}
 
+    {/* TRF-01 Step 3: Pick Against Order + TRF-02 auto-confirm + TRF-03 multi-item */}
     {wizStep===2 && <div className="card">
-      <h3 style={{marginBottom:16}}>Step 3 — Generate BOL</h3>
+      <h3 style={{marginBottom:16}}>Step 3 — Pick Against Order</h3>
+      <div className="mb-4 text-sm text-sec">{pickedCount}/{pickItems.length} items picked</div>
+      {pickItems.map((item,idx)=><div key={idx} className="flex-between" style={{padding:14,background:scanFlash===idx?'var(--green)':picked[idx]?'var(--green-light)':'var(--surface)',borderRadius:8,marginBottom:8,transition:'background .5s'}}>
+        <div>
+          <strong style={{color:scanFlash===idx?'#fff':'var(--cascade-navy)'}}>{item.name}</strong>
+          <div className="text-sm" style={{color:scanFlash===idx?'rgba(255,255,255,.8)':'var(--text-secondary)'}}>{item.sku} — {item.qty} — {item.loc}</div>
+        </div>
+        {scanFlash===idx?<span style={{color:'#fff',fontWeight:700,fontSize:14}}>✅ Scanned!</span>:picked[idx]?<Badge status="Complete"/>:<button className="btn-sm btn-blue" onClick={()=>handleScanPick(idx)}>📷 Tap to Scan Pick</button>}
+      </div>)}
+      <div className="wizard-nav"><button className="btn-sm btn-outline" onClick={()=>setWizStep(1)}>← Back</button><button className="btn-sm btn-outline" onClick={()=>setShowExitConfirm(true)}>✕ Cancel</button><button className={`btn-sm ${allPicked?'btn-blue':'btn-outline'}`} disabled={!allPicked} onClick={()=>setWizStep(3)}>All Picked → Generate BOL</button></div>
+    </div>}
+
+    {/* Step 4: Generate BOL */}
+    {wizStep===3 && <div className="card">
+      <h3 style={{marginBottom:16}}>Step 4 — Generate BOL</h3>
       <div className="bol-preview">{`BILL OF LADING — BOL-2026-043
+Transfer Order: TO-2026-0044
 From: Blaine Warehouse, 123 Industrial Dr, Blaine WA 98230
 To:   Ferndale Production Floor, 456 Production Way, Ferndale WA
 Date: April 6, 2026
 Dispatched by: Peter Visser
 
 Items:
-DAFO EVA Foam 3mm Natural (DAFO-FM-3-NTL) — 40 units — Location: A2-03
+1. DAFO EVA Foam 3mm Natural (DAFO-FM-3-NTL) — 40 units — Location: A2-03
+2. PP Sheet 4mm White (PP-SHT-4-WHT) — 6 rolls — Location: B1-01
 
-Requested by: Ferndale Production (Kanban REQ-2026-0089)
+Requested by: Ferndale Production (Kanban REQ-2026-0089, REQ-2026-0090)
 Transport: Internal delivery`}</div>
       <div className="callout callout-green mt-4">This BOL will be automatically routed to Purchasing — no manual packing slip needed.</div>
-      <div className="wizard-nav"><button className="btn-sm btn-outline" onClick={()=>setWizStep(1)}>← Back</button><button className="btn-sm btn-blue" onClick={()=>setWizStep(3)}>Confirm & Generate BOL →</button></div>
+      <div className="wizard-nav"><button className="btn-sm btn-outline" onClick={()=>setWizStep(2)}>← Back</button><button className="btn-sm btn-blue" onClick={()=>setWizStep(4)}>Confirm & Generate BOL →</button></div>
     </div>}
 
-    {wizStep===3 && <div className="card">
-      <h3 style={{marginBottom:16}}>Step 4 — Dispatch Confirmation</h3>
+    {/* Step 5: Dispatch */}
+    {wizStep===4 && <div className="card">
+      <h3 style={{marginBottom:16}}>Step 5 — Dispatch Confirmation</h3>
       <div className="form-field"><label>Handler Name</label><input defaultValue="Peter Visser" style={{width:'100%',padding:'10px 14px',border:'1px solid var(--border)',borderRadius:7}}/></div>
       <div className="form-field"><label>Estimated Arrival at Ferndale</label><input defaultValue="~45 minutes" style={{width:'100%',padding:'10px 14px',border:'1px solid var(--border)',borderRadius:7}}/></div>
       <div className="callout callout-blue mt-4">Ferndale will be notified to confirm receipt. When they confirm via their screen, this transfer closes automatically.</div>
-      <div className="wizard-nav"><button className="btn-sm btn-outline" onClick={()=>setWizStep(2)}>← Back</button><button className="btn-sm btn-green" style={{padding:'12px 24px'}} onClick={()=>setSplash(true)}>🚚 Mark as Dispatched</button></div>
-    </div>}
-
-    {wizStep===4 && <div className="card" style={{textAlign:'center',padding:40}}>
-      <h3>BOL-2026-043 Dispatched</h3>
-      <p className="text-sec mt-2">Waiting for Ferndale confirmation.</p>
-      <div className="flex items-center justify-center gap-3 mt-4" style={{justifyContent:'center'}}>
-        <span style={{fontSize:20}}>🚚</span><span>→</span><span style={{color:'var(--amber)'}}>⏳ Confirming</span><span>→</span><span style={{color:'var(--text-secondary)'}}>✅ Complete</span>
-      </div>
+      <div className="wizard-nav"><button className="btn-sm btn-outline" onClick={()=>setWizStep(3)}>← Back</button><button className="btn-sm btn-green" style={{padding:'12px 24px'}} onClick={()=>{addToast&&addToast('📦 BOL-2026-043 dispatched — 2 items to Ferndale. ETA ~45 min.','green');setWizStep(-1);setDispatched(true);}}>🚚 Mark as Dispatched</button></div>
     </div>}
   </div>;
 
@@ -793,7 +1229,8 @@ Transport: Internal delivery`}</div>
       <div className={`tab-item${tab==='history'?' active':''}`} onClick={()=>setTab('history')}>Transfer History</div>
     </div>
     {tab==='pending' && <>
-      <div className="callout callout-amber mb-4">3 pending transfer requests from Ferndale. 1 is urgent — DAFO foam needed within 2 hours.</div>
+      {preSelectedItem && <div className="callout callout-blue mb-4" style={{borderColor:'var(--cascade-blue)'}}>📦 Pre-selected from Inventory: <strong>{preSelectedItem.name}</strong> ({preSelectedItem.sku}) — {preSelectedItem.onHand} units available in Blaine.</div>}
+      <div className="callout callout-amber mb-4">{TRANSFERS.filter(t=>t.status==='Awaiting Pick').length} pending transfer requests from Ferndale. 1 is urgent — DAFO foam needed within 2 hours.</div>
       <div className="card"><table className="data-table"><thead><tr><th>Request ID</th><th>Requested By</th><th>Items</th><th>Stock Avail.</th><th>Urgency</th><th>Status</th><th>Action</th></tr></thead>
       <tbody>{TRANSFERS.map((t,i)=><tr key={i}>
         <td style={{fontWeight:600}}>{t.id}</td><td>{t.by}</td>
@@ -804,6 +1241,7 @@ Transport: Internal delivery`}</div>
     </>}
     {tab==='history' && <div className="card"><table className="data-table"><thead><tr><th>BOL</th><th>Items</th><th>Route</th><th>Date</th><th>Status</th></tr></thead>
       <tbody>
+        {dispatched && <tr><td style={{fontWeight:600}}>BOL-2026-043</td><td>2 items (TO-2026-0044)</td><td>Blaine → Ferndale</td><td>Today</td><td><Badge status="In Transit"/></td></tr>}
         <tr><td>BOL-2026-040</td><td>DAFO-304 (40u)</td><td>Blaine → Ferndale</td><td>Apr 5, 2026</td><td><Badge status="Complete"/></td></tr>
         <tr><td>BOL-2026-039</td><td>FF-200-XS (24u)</td><td>Blaine → Ferndale</td><td>Apr 4, 2026</td><td><Badge status="Complete"/></td></tr>
       </tbody></table></div>}
@@ -811,51 +1249,80 @@ Transport: Internal delivery`}</div>
 }
 
 // ==================== SCREEN 7: Cycle Count ====================
-function CycleCountScreen() {
+function CycleCountScreen({nav,addToast}) {
+  const [zoneTab,setZoneTab]=useState('a');
   const [counting,setCounting]=useState(false);
   const [counts,setCounts]=useState({});
-  const [submitted,setSubmitted]=useState(false);
   const countItems = ITEMS.slice(0,5);
 
-  if(submitted) return <SplashScreen icon="✅" title="Cycle Count Complete!" text="A-Zone count submitted. 5 items counted, variances recorded."
-    actions={<button className="btn-sm btn-blue" onClick={()=>{setSubmitted(false);setCounting(false);setCounts({});}}>Back to Cycle Count</button>}/>;
+  const zones = [
+    {id:'a',label:'A-Zone — High Value',badge:'Due today',badgeColor:'red',desc:'High-value raw materials: EVA foam, PP sheets, overlays. Counted weekly due to production impact.',schedule:'Weekly (every Monday)',lastVariance:'2 found (both <5%) — Mar 28, 2026'},
+    {id:'b',label:'B-Zone — Medium Value',badge:'Apr 15',badgeColor:'amber',desc:'Assembly components: velcro, rivets, strapping. Monthly count — moderate production impact.',schedule:'Monthly (15th)',lastVariance:'0 variances — Mar 15, 2026'},
+    {id:'c',label:'C-Zone — Consumables',badge:'Jun 1',badgeColor:'green',desc:'Consumables and finishing materials: adhesives, buffer strips. Quarterly count — low impact.',schedule:'Quarterly (1st of quarter)',lastVariance:'1 found (<3%) — Jan 1, 2026'},
+  ];
+  const activeZone = zones.find(z=>z.id===zoneTab);
 
   return <div>
-    <div className="grid-2 mb-4">
-      <div className="card"><div className="card-header">Count Schedule</div>
-        <div className="detail-row"><span>A-Zone (High Value)</span><strong style={{color:'var(--red)'}}>Weekly — Due today</strong></div>
-        <div className="detail-row"><span>B-Zone (Medium)</span><strong>Monthly — Apr 15</strong></div>
-        <div className="detail-row"><span>C-Zone (Consumables)</span><strong>Quarterly — Jun 1</strong></div>
-      </div>
-      <div className="card"><div className="card-header">Last Count Summary</div>
-        <div className="detail-row"><span>Date</span><strong>March 28, 2026</strong></div>
-        <div className="detail-row"><span>Zone</span><strong>A-Zone</strong></div>
-        <div className="detail-row"><span>Items</span><strong>18 items</strong></div>
-        <div className="detail-row"><span>Variances</span><strong>2 found (both &lt;5%)</strong></div>
-        <div className="detail-row"><span>Status</span><Badge status="Complete"/></div>
-      </div>
+    {/* CC-02: Zone context description callout */}
+    <div className="callout callout-blue mb-4">Cycle Count — Physical verification of on-hand stock against system quantities. A-Zone weekly (high value). B-Zone monthly. C-Zone quarterly.</div>
+
+    {/* CC-01: 3 zone tabs */}
+    <div className="tab-bar">
+      {zones.map(z=><div key={z.id} className={`tab-item${zoneTab===z.id?' active':''}`} onClick={()=>{setZoneTab(z.id);setCounting(false);setCounts({});}}>
+        {z.label} <span className={`badge badge-${z.badgeColor}`} style={{marginLeft:6}}>{z.badge}</span>
+      </div>)}
     </div>
-    {!counting?<button className="btn-sm btn-blue" style={{padding:'12px 24px'}} onClick={()=>setCounting(true)}>▶ Start A-Zone Count</button>
-    :<div className="card">
-      <div className="card-header">Count Sheet — A-Zone, Blaine</div>
-      <table className="data-table"><thead><tr><th>Item</th><th>SKU</th><th>Location</th><th>System Qty</th><th>Counted Qty</th><th>Variance</th></tr></thead>
-      <tbody>{countItems.map((it,i)=>{
-        const counted = counts[i];
-        const variance = counted!==undefined?(counted-it.onHand):null;
-        const pct = variance!==null?Math.abs(Math.round((variance/it.onHand)*100)):null;
-        return <tr key={i}><td>{it.name}</td><td><span className="badge badge-gray">{it.sku}</span></td><td>{it.loc}</td><td>{it.onHand}</td>
-          <td><input type="number" value={counted!==undefined?counted:''} onChange={e=>setCounts({...counts,[i]:e.target.value===''?undefined:parseInt(e.target.value)})} placeholder="Enter"/></td>
-          <td>{variance!==null?(pct===0?<span className="badge badge-green">✅ Match</span>:pct<=5?<span className="badge badge-amber">⚠️ Minor ({variance>0?'+':''}{variance})</span>:pct<=15?<span className="badge badge-red">🔴 Investigate ({variance>0?'+':''}{variance})</span>:<span className="badge badge-red">🚨 Critical ({variance>0?'+':''}{variance})</span>):'—'}</td>
-        </tr>})}</tbody></table>
-      <div className="mt-4"><button className="btn-sm btn-green" style={{padding:'12px 24px'}} onClick={()=>setSubmitted(true)}>Submit Count Report</button></div>
-    </div>}
+
+    {/* CC-01: Zone content — description, schedule, last variance, start button */}
+    <div className="card">
+      <div style={{fontSize:13,color:'var(--text-secondary)',marginBottom:12,lineHeight:1.5}}>{activeZone.desc}</div>
+      <div className="detail-row"><span className="text-sec">Schedule</span><strong>{activeZone.schedule}</strong></div>
+      <div className="detail-row"><span className="text-sec">Last Variance</span><strong>{activeZone.lastVariance}</strong></div>
+
+      {!counting && <div className="mt-4">
+        <button className="btn-sm btn-blue" style={{padding:'12px 24px'}} onClick={()=>setCounting(true)}>▶ Start {activeZone.label.split(' —')[0]} Count</button>
+      </div>}
+
+      {counting && <>
+        <div className="card-header mt-4">Count Sheet — {activeZone.label.split(' —')[0]}, Blaine</div>
+        <table className="data-table"><thead><tr><th>Item</th><th>SKU</th><th>Location</th><th>System Qty</th><th>Counted Qty</th><th>Variance</th></tr></thead>
+        <tbody>{countItems.map((it,i)=>{
+          const counted = counts[i];
+          const variance = counted!==undefined?(counted-it.onHand):null;
+          const pct = variance!==null?Math.abs(Math.round((variance/it.onHand)*100)):null;
+          return <tr key={i}><td>{it.name}</td><td><span className="badge badge-gray">{it.sku}</span></td><td>{it.loc}</td><td>{it.onHand}</td>
+            <td><input type="number" value={counted!==undefined?counted:''} onChange={e=>setCounts({...counts,[i]:e.target.value===''?undefined:parseInt(e.target.value)})} placeholder="Enter"/></td>
+            <td>{variance!==null?(pct===0?<span className="badge badge-green">✅ Match</span>:pct<=5?<span className="badge badge-amber">⚠️ Minor ({variance>0?'+':''}{variance})</span>:pct<=15?<span className="badge badge-red">🔴 Investigate ({variance>0?'+':''}{variance})</span>:<span className="badge badge-red">🚨 Critical ({variance>0?'+':''}{variance})</span>):'—'}</td>
+          </tr>})}</tbody></table>
+        <div className="mt-4"><button className="btn-sm btn-green" style={{padding:'12px 24px'}} onClick={()=>{addToast&&addToast(`✅ ${activeZone.label.split(' —')[0]} cycle count submitted — ${countItems.length} items counted, variances recorded.`,'green');setCounting(false);setCounts({});}}>Submit Count Report</button></div>
+      </>}
+    </div>
   </div>;
 }
 
 // ==================== SCREEN 8: Purchasing Dashboard ====================
-function PurchasingDashScreen({role,nav}) {
+function PurchasingDashScreen({role,nav,addToast}) {
   const isReadOnly = role==='warehouse-manager';
-  return <div>
+  const [replenishItem,setReplenishItem]=useState(null);
+  const [poSession,setPoSession]=useState([]);
+  const [showVendorBreakdown,setShowVendorBreakdown]=useState(false);
+  const [chartHover,setChartHover]=useState(null);
+
+  // PD-01: Sort items by urgency (critical first)
+  const trendItems = [...ITEMS].filter(i=>i.supplier).sort((a,b)=>a.daysLeft-b.daysLeft).slice(0,8);
+  // PD-03: 6-month spend data
+  const spendData = [{m:'Nov',s:4200},{m:'Dec',s:3800},{m:'Jan',s:5100},{m:'Feb',s:4400},{m:'Mar',s:4900},{m:'Apr',s:5400}];
+  const maxSpend = Math.max(...spendData.map(d=>d.s))*1.2;
+
+  // PD-02 session persistence: clears on navigation away (component remount). This is intentional —
+  // session is scoped to the current purchasing workflow. User must complete or discard before leaving.
+  const addToSession = (item,vendor,qty,price)=>{
+    setPoSession(prev=>[...prev,{item:item.name,sku:item.sku,vendor,qty,price,total:qty*price}]);
+    setReplenishItem(null);
+  };
+  const sessionTotal = poSession.reduce((s,p)=>s+p.total,0);
+
+  return <div style={{paddingBottom:poSession.length>0?70:0}}>
     {isReadOnly && <div className="read-only-banner">🔒 Viewing in read-only mode. To create or modify purchase orders, contact the Purchasing Team.</div>}
     <div className="kpi-row">
       <div className="kpi-card"><div className="kpi-label">Items Below Reorder</div><div className="kpi-value">7</div><div className="kpi-trend red">🔴 +2 from yesterday</div></div>
@@ -865,38 +1332,53 @@ function PurchasingDashScreen({role,nav}) {
       <div className="kpi-card"><div className="kpi-label">Avg Lead Time</div><div className="kpi-value">4.2 days</div><div className="kpi-trend green">↓ Improved</div></div>
     </div>
 
-    {!isReadOnly && <div className="card">
-      <div className="card-header">📋 Your Actions Today</div>
-      {[
-        {sev:'red',text:'Create PO for DAFO EVA Foam 3mm — 0 days stock remaining',btn:'Create PO →'},
-        {sev:'red',text:'Create PO for PP Sheet 4mm White — 0 days remaining',btn:'Create PO →'},
-        {sev:'red',text:'Follow up on PO-2026-0412 Texas Steel Corp — 3 days overdue',btn:'View PO →'},
-        {sev:'amber',text:'3 more items reach reorder point in 2–5 days',btn:'Review Worksheet →'},
-      ].map((a,i)=><div key={i} className="alert-row">
-        <div className={`severity-dot ${a.sev}`}/>
-        <div className="alert-content"><div style={{fontSize:13}}>{a.text}</div></div>
-        <div className="alert-action"><button className="btn-sm btn-blue" onClick={()=>nav&&nav('purchasing-mgmt')}>{a.btn}</button></div>
-      </div>)}
-    </div>}
-
+    {/* PD-01: Inventory Level Trends (replaces Recent PO Activity) */}
     <div className="grid-2">
       <div className="card">
-        <div className="card-header">Spend by Vendor (This Month)</div>
-        <ChartBar label="Pacific Foam" value={6240} max={6240} amount={6240}/>
-        <ChartBar label="Pacific Industrial" value={4800} max={6240} amount={4800}/>
-        <ChartBar label="Texas Steel" value={2180} max={6240} amount={2180}/>
-        <ChartBar label="Cascade Supplies" value={1060} max={6240} amount={1060}/>
+        <div className="card-header"><span>Inventory Level Trends</span></div>
+        {trendItems.map((it,i)=>{
+          const pct=Math.min(100,Math.round((it.onHand/Math.max(it.min*3,1))*100));
+          const thresholdPct=Math.round((it.min/(it.min*3))*100);
+          const barColor=it.onHand>=it.min?'var(--green)':it.onHand>=it.min*0.5?'var(--amber)':'var(--red)';
+          const isCritical=it.onHand<it.min*0.5;
+          return <div className="inv-trend-row" key={i}>
+            <div className="inv-trend-name">{it.name}</div>
+            <div className="inv-trend-bar-wrap">
+              <div className="inv-trend-fill" style={{width:`${pct}%`,background:barColor}}><span>{it.onHand} / min {it.min}</span></div>
+              <div className="inv-trend-threshold" style={{left:`${thresholdPct}%`}}/>
+            </div>
+            {!isReadOnly && it.onHand<it.min && <div className="inv-trend-action">
+              <button className={`btn-sm ${isCritical?'btn-red':'btn-amber'}`} style={{fontSize:12}} onClick={()=>setReplenishItem(it)}>Replenish</button>
+            </div>}
+          </div>;
+        })}
       </div>
+
+      {/* PD-03: 6-month procurement cost trend line */}
       <div className="card">
-        <div className="card-header">Recent PO Activity</div>
-        <table className="data-table"><thead><tr><th>PO #</th><th>Vendor</th><th>Action</th><th>Date</th></tr></thead>
-        <tbody>
-          <tr><td>PO-2026-0415</td><td>Pacific Foam</td><td><Badge status="Sent"/></td><td>Today</td></tr>
-          <tr><td>PO-2026-0414</td><td>Pacific Industrial</td><td><Badge status="In Transit"/></td><td>Apr 4</td></tr>
-          <tr><td>PO-2026-0413</td><td>Cascade Supplies</td><td><Badge status="Active"/></td><td>Apr 3</td></tr>
-          <tr><td>PO-2026-0412</td><td>Texas Steel</td><td><Badge status="Overdue"/></td><td>Apr 3</td></tr>
-          <tr><td>PO-2026-0411</td><td>Pacific Foam</td><td><Badge status="Complete"/></td><td>Today</td></tr>
-        </tbody></table>
+        <div className="card-header"><span>Procurement Cost Trend (6 months)</span>
+          <button className="btn-sm btn-outline" style={{fontSize:11}} onClick={()=>setShowVendorBreakdown(!showVendorBreakdown)}>{showVendorBreakdown?'Hide':'View by'} Vendor</button>
+        </div>
+        <div className="trend-chart" style={{position:'relative'}} onMouseLeave={()=>setChartHover(null)}>
+          <svg viewBox="0 0 500 180" preserveAspectRatio="none">
+            {[0,1,2,3,4].map(i=><line key={i} className="chart-grid-line" x1="50" y1={20+i*35} x2="490" y2={20+i*35}/>)}
+            <polyline className="chart-line" points={spendData.map((d,i)=>`${50+i*88},${160-((d.s/maxSpend)*140)}`).join(' ')}/>
+            {spendData.map((d,i)=><React.Fragment key={i}>
+              <circle className="chart-dot" cx={50+i*88} cy={160-((d.s/maxSpend)*140)} r={chartHover===i?6:4} style={{cursor:'pointer'}}/>
+              <rect x={50+i*88-44} y="0" width="88" height="180" fill="transparent" style={{cursor:'pointer'}} onMouseEnter={()=>setChartHover(i)}/>
+              <text className="chart-label" x={50+i*88} y="178" textAnchor="middle">{d.m}</text>
+            </React.Fragment>)}
+            <text className="chart-label" x="10" y="25" textAnchor="start">$6k</text>
+            <text className="chart-label" x="10" y="165" textAnchor="start">$0</text>
+          </svg>
+          {chartHover!==null && <div className="chart-tooltip" style={{left:`${((50+chartHover*88)/500)*100}%`,top:`${((160-((spendData[chartHover].s/maxSpend)*140))/180)*100}%`}}>{spendData[chartHover].m}: ${spendData[chartHover].s.toLocaleString()} total spend</div>}
+        </div>
+        {showVendorBreakdown && <div style={{marginTop:12}}>
+          <ChartBar label="Pacific Foam" value={6240} max={6240} amount={6240}/>
+          <ChartBar label="Pacific Industrial" value={4800} max={6240} amount={4800}/>
+          <ChartBar label="Texas Steel" value={2180} max={6240} amount={2180}/>
+          <ChartBar label="Cascade Supplies" value={1060} max={6240} amount={1060}/>
+        </div>}
       </div>
     </div>
 
@@ -914,21 +1396,48 @@ function PurchasingDashScreen({role,nav}) {
         <td>{v.onTime}%</td><td>{v.lead} days</td><td>{v.lastIssue}</td>
       </tr>)}</tbody></table>
     </div>}
+
+    {/* PD-02: Replenishment slide-in pane */}
+    {replenishItem && <>
+      <div className="replenish-pane-overlay" onClick={()=>setReplenishItem(null)}/>
+      <div className="replenish-pane">
+        <div className="replenish-pane-header"><h3>Replenish: {replenishItem.name}</h3><button onClick={()=>setReplenishItem(null)} style={{background:'none',color:'#fff',fontSize:20,cursor:'pointer'}}>✕</button></div>
+        <div className="replenish-pane-body">
+          <div style={{background:'var(--surface)',borderRadius:8,padding:14,marginBottom:16}}>
+            <div className="detail-row"><span className="text-sec">Current On Hand</span><strong style={{color:replenishItem.onHand<replenishItem.min?'var(--red)':'var(--green)'}}>{replenishItem.onHand}</strong></div>
+            <div className="detail-row"><span className="text-sec">Min Stock</span><strong>{replenishItem.min}</strong></div>
+            <div className="detail-row"><span className="text-sec">Suggested Order Qty</span><strong>{replenishItem.suggestQty}</strong></div>
+          </div>
+          <h4 style={{fontSize:14,fontWeight:700,marginBottom:10}}>Suggested Vendor</h4>
+          {(()=>{const v=VENDORS.find(x=>x.name===replenishItem.supplier);return v?<div className="vendor-suggest">
+            <div className="flex-between mb-2"><strong>{v.name}</strong><span className={`badge badge-${v.score>=8?'green':v.score>=7?'amber':'red'}`}>{v.score}/10</span></div>
+            <div className="detail-row"><span className="text-sec">Lead Time</span><strong>{v.lead} days</strong></div>
+            <div className="detail-row"><span className="text-sec">On-Time</span><strong>{v.onTime}%</strong></div>
+            <div className="detail-row"><span className="text-sec">Unit Price</span><strong>${replenishItem.price.toFixed(2)}</strong></div>
+            <div className="detail-row"><span className="text-sec">Estimated Total</span><strong>${(replenishItem.suggestQty*replenishItem.price).toFixed(2)}</strong></div>
+          </div>:null;})()}
+          <button className="btn-sm btn-blue mt-4" style={{width:'100%',padding:14}} onClick={()=>addToSession(replenishItem,replenishItem.supplier,replenishItem.suggestQty,replenishItem.price)}>Add to PO →</button>
+        </div>
+      </div>
+    </>}
+
+    {/* PD-02: Session accumulator bottom bar (Component 16) */}
+    {poSession.length>0 && <div className="session-bar">
+      <span>{poSession.length} item{poSession.length>1?'s':''} added — ${sessionTotal.toLocaleString(undefined,{minimumFractionDigits:2})}</span>
+      <button className="session-cta" onClick={()=>nav&&nav('purchasing-mgmt')}>Review & Submit →</button>
+    </div>}
   </div>;
 }
 
 // ==================== SCREEN 9: Purchasing Management ====================
-function PurchasingMgmtScreen({initialTab}) {
+function PurchasingMgmtScreen({initialTab,nav,addToast}) {
   const [tab,setTab]=useState(initialTab||'worksheet');
   const [selected,setSelected]=useState({});
   const [poWizard,setPoWizard]=useState(-1);
-  const [poSplash,setPoSplash]=useState(false);
+  const [editingVendor,setEditingVendor]=useState(null);
+  const [editQtys,setEditQtys]=useState({});
   const worksheetItems = ITEMS.filter(i=>i.daysLeft<=7&&i.supplier);
   const selCount = Object.values(selected).filter(Boolean).length;
-
-  if(poSplash) return <SplashScreen icon="📨" title={`${selCount} Purchase Orders Submitted!`}
-    text="Vendors will be notified. Expected deliveries updated in your dashboard."
-    actions={<button className="btn-sm btn-blue" onClick={()=>{setPoSplash(false);setPoWizard(-1);setSelected({});}}>Back to Purchasing</button>}/>;
 
   return <div>
     <div className="callout callout-amber mb-4">7 items need your attention — 2 critical stockouts possible this week.</div>
@@ -981,12 +1490,30 @@ function PurchasingMgmtScreen({initialTab}) {
               <div className="wizard-nav"><button className="btn-sm btn-outline" onClick={()=>setPoWizard(2)}>← Back</button><button className="btn-sm btn-blue" onClick={()=>setPoWizard(4)}>Review & Submit →</button></div>
             </div>}
             {poWizard===4 && <div>
-              <h4 className="mb-4">Submit & Confirm</h4>
-              <div style={{background:'var(--surface)',borderRadius:8,padding:18,marginBottom:16}}>
-                <div className="detail-row"><span>POs to create</span><strong>{selCount}</strong></div>
-                <div className="detail-row"><span>Total value</span><strong>$1,825</strong></div>
-              </div>
-              <div className="wizard-nav"><button className="btn-sm btn-outline" onClick={()=>setPoWizard(3)}>← Back</button><button className="btn-sm btn-green" style={{padding:'12px 24px'}} onClick={()=>setPoSplash(true)}>📨 Submit All POs</button></div>
+              {/* PM-01: Invoice-style vendor preview */}
+              <h4 className="mb-4">Review & Submit — Invoice Preview</h4>
+              {['Pacific Foam Supplies','Pacific Industrial','Cascade Supplies','Texas Steel Corp'].map((v,vi)=>{
+                const vitems = worksheetItems.filter(it=>it.supplier===v&&selected[worksheetItems.indexOf(it)]);
+                if(!vitems.length)return null;
+                const isEditing = editingVendor===v;
+                const subtotal = vitems.reduce((s,it)=>{const q=editQtys[it.sku]||it.suggestQty;return s+q*it.price;},0);
+                return <div className="invoice-vendor-block" key={vi}>
+                  <div className="invoice-vendor-header"><span>{v}</span><div className="flex gap-2">
+                    {isEditing?<button className="btn-sm btn-green" style={{fontSize:11}} onClick={()=>setEditingVendor(null)}>✅ Done</button>
+                    :<><button className="btn-sm btn-green" style={{fontSize:11}}>✅ OK</button><button className="btn-sm btn-outline" style={{fontSize:11}} onClick={()=>setEditingVendor(v)}>✏ Edit</button></>}
+                  </div></div>
+                  <div className="invoice-line-item" style={{fontWeight:600,color:'var(--text-secondary)',fontSize:11,textTransform:'uppercase'}}><span>Description</span><span>Qty</span><span>Unit Price</span><span style={{textAlign:'right'}}>Total</span></div>
+                  {vitems.map((it,ii)=>{const q=editQtys[it.sku]||it.suggestQty;return <div className="invoice-line-item" key={ii}>
+                    <span>{it.name}</span>
+                    <span>{isEditing?<input type="number" value={q} onChange={e=>setEditQtys({...editQtys,[it.sku]:parseInt(e.target.value)||0})} style={{width:70,padding:'4px 8px',border:'1px solid var(--cascade-blue)',borderRadius:4,fontSize:13}}/>:q}</span>
+                    <span>${it.price.toFixed(2)}</span>
+                    <span style={{textAlign:'right',fontWeight:600}}>${(q*it.price).toFixed(2)}</span>
+                  </div>;})}
+                  <div className="invoice-subtotal">Subtotal: ${subtotal.toFixed(2)}</div>
+                </div>;
+              })}
+              <div className="invoice-grand-total"><span>Grand Total</span><span>${worksheetItems.filter((_,i)=>selected[i]).reduce((s,it)=>s+(editQtys[it.sku]||it.suggestQty)*it.price,0).toFixed(2)}</span></div>
+              <div className="wizard-nav" style={{marginTop:16}}><button className="btn-sm btn-outline" onClick={()=>setPoWizard(3)}>← Back</button><div className="flex gap-2"><button className="btn-sm btn-green" style={{padding:'12px 24px'}} onClick={()=>{addToast&&addToast(`📨 ${selCount} Purchase Orders submitted — vendors notified.`,'green');setPoWizard(-1);setSelected({});}}>📨 Submit All →</button><button className="btn-sm btn-outline">Submit Selected ▾</button></div></div>
             </div>}
           </div>
         </div>
@@ -1040,10 +1567,8 @@ function PurchasingMgmtScreen({initialTab}) {
 }
 
 // ==================== SCREEN 10: Director of Manufacturing Dashboard ====================
-function DashboardMfg({nav}) {
+function DashboardMfg({nav,addToast}) {
   const [bolConfirmed,setBolConfirmed]=useState(false);
-  const [showConfirmSplash,setShowConfirmSplash]=useState(false);
-  if(showConfirmSplash) return <SplashScreen icon="✅" title="BOL-2026-041 Receipt Confirmed!" text="40 units of DAFO-304 received at Ferndale. Blaine inventory updated. Transfer complete." actions={<button className="btn-sm btn-blue" onClick={()=>setShowConfirmSplash(false)}>Back to Dashboard</button>}/>;
   return <div>
     <div className="kpi-row">
       <div className="kpi-card"><div className="kpi-label">Active Production Orders</div><div className="kpi-value">14</div><div className="kpi-trend green">On track</div></div>
@@ -1081,7 +1606,7 @@ function DashboardMfg({nav}) {
           <div style={{padding:'10px 0',borderBottom:'1px solid var(--border)'}}>
             <div className="flex-between"><strong style={{fontSize:13}}>BOL-2026-041</strong><Badge status="In Transit"/></div>
             <div className="text-sm text-sec mt-2">DAFO-304 (40u) — ETA 10:15 AM</div>
-            {!bolConfirmed?<button className="btn-sm btn-blue mt-2" onClick={()=>{setBolConfirmed(true);setShowConfirmSplash(true);}}>Confirm Receipt</button>:<Badge status="Complete"/>}
+            {!bolConfirmed?<button className="btn-sm btn-blue mt-2" onClick={()=>{setBolConfirmed(true);addToast&&addToast('✅ BOL-2026-041 receipt confirmed — transfer complete.','green');}}>Confirm Receipt</button>:<Badge status="Complete"/>}
           </div>
           <div style={{padding:'10px 0'}}>
             <div className="flex-between"><strong style={{fontSize:13}}>BOL-2026-040</strong><Badge status="Complete"/></div>
@@ -1185,20 +1710,48 @@ function ExecDashboard({mode}) {
       <div className="kpi-card"><div className="kpi-label">Blaine Capacity</div><div className="kpi-value">62%</div><div className="kpi-trend green">Normal</div></div>
     </div>
 
-    <div className="card">
-      <div className="card-header">Pending Your Approval — POs above $10,000</div>
-      {approvalDemo?<div className="callout callout-green">No POs awaiting approval</div>:<div>
-        <div style={{padding:16,border:'1px solid var(--border)',borderRadius:8,marginBottom:12}}>
-          <div className="flex-between mb-2"><strong>PO-2026-0416</strong><span className="badge badge-amber">$12,400</span></div>
-          <div className="text-sm text-sec">Vendor: Pacific Foam Supplies · 3 items · Submitted by: Purchasing Team</div>
-          <div className="text-sm text-sec mt-2">EVA Foam 3mm (400u), EVA Foam 5mm (200u), PP Sheet 4mm (50 rolls)</div>
-          <div className="flex gap-2 mt-4">
-            <button className="btn-sm btn-green" onClick={()=>setApprovalDemo(true)}>✅ Approve</button>
-            <button className="btn-sm btn-red" onClick={()=>setApprovalDemo(true)}>✗ Reject</button>
-            <button className="btn-sm btn-outline">View Details</button>
+    <div className="grid-2">
+      <div className="card">
+        <div className="card-header">Pending Your Approval — POs above $10,000</div>
+        {approvalDemo?<div className="callout callout-green">No POs awaiting approval</div>:<div>
+          <div style={{padding:16,border:'1px solid var(--border)',borderRadius:8,marginBottom:12}}>
+            <div className="flex-between mb-2"><strong>PO-2026-0416</strong><span className="badge badge-amber">$12,400</span></div>
+            <div className="text-sm text-sec">Vendor: Pacific Foam Supplies · 3 items · Submitted by: Purchasing Team</div>
+            <div className="text-sm text-sec mt-2">EVA Foam 3mm (400u), EVA Foam 5mm (200u), PP Sheet 4mm (50 rolls)</div>
+            <div className="flex gap-2 mt-4">
+              <button className="btn-sm btn-green" onClick={()=>setApprovalDemo(true)}>✅ Approve</button>
+              <button className="btn-sm btn-red" onClick={()=>setApprovalDemo(true)}>✗ Reject</button>
+              <button className="btn-sm btn-outline">View Details</button>
+            </div>
           </div>
-        </div>
-      </div>}
+        </div>}
+      </div>
+      {/* EXEC-01: Spend context panel — visible when PO approval detail is open */}
+      <div className="card">
+        <div className="card-header">Spend Context — Current Month</div>
+        {(()=>{
+          const spent=18500,budget=25000,openOrders=12400;
+          const pctUsed=Math.round((spent/budget)*100);
+          const gaugeColor=pctUsed<80?'var(--green)':pctUsed<100?'var(--amber)':'var(--red)';
+          const gaugeLabel=pctUsed<80?'Within budget':pctUsed<100?'Approaching budget limit':'Budget exceeded — flag before approving';
+          return <>
+            <div className="spend-gauge">
+              <div className="spend-gauge-label">Current Month Spend vs Budget</div>
+              <div className="spend-gauge-bar"><div className="spend-gauge-fill" style={{width:`${Math.min(pctUsed,100)}%`,background:gaugeColor}}/></div>
+              <div className="spend-gauge-text">
+                <span>${spent.toLocaleString()} of ${budget.toLocaleString()} used</span>
+                <span className={`badge badge-${pctUsed<80?'green':pctUsed<100?'amber':'red'}`}>{pctUsed}% used</span>
+              </div>
+              {pctUsed>=80 && <div style={{fontSize:12,color:gaugeColor,fontWeight:600,marginTop:4}}>{gaugeLabel}</div>}
+            </div>
+            <div style={{background:'var(--surface)',borderRadius:8,padding:14,marginTop:12}}>
+              <div className="detail-row"><span className="text-sec">Open Order Value</span><strong>${openOrders.toLocaleString()}</strong></div>
+              <div className="detail-row"><span className="text-sec">If Approved, Total</span><strong style={{color:gaugeColor}}>${(spent+openOrders).toLocaleString()}</strong></div>
+              <div className="detail-row"><span className="text-sec">Budget Remaining</span><strong>${(budget-spent).toLocaleString()}</strong></div>
+            </div>
+          </>;
+        })()}
+      </div>
     </div>
 
     <div className="grid-2">
@@ -1242,10 +1795,73 @@ function AccessRestricted({nav,role}) {
   </div></div>;
 }
 
+// ==================== A-01: ALERTS PANE COMPONENT ====================
+function AlertsPane({role,nav,onClose}) {
+  const [tab,setTab]=useState('all');
+  const alerts = [
+    {sev:'red',cat:'Stock',title:'DAFO EVA Foam 3mm',desc:'12 units, 85 needed this week',btn:'Create PO'},
+    {sev:'red',cat:'Stock',title:'PP Sheet 4mm White',desc:'8 rolls, 22 needed, 5-day lead',btn:'Create PO'},
+    {sev:'red',cat:'POs',title:'PO-0412 Texas Steel — OVERDUE',desc:'3 days overdue, 12 items',btn:'View PO'},
+    {sev:'amber',cat:'Stock',title:'Velcro Strap Black 1"',desc:'210 units, reorder 300, 2 days left',btn:'Add to PO'},
+    {sev:'amber',cat:'Stock',title:'Rivet 1/4" Steel',desc:'340 units, reorder 500, 3 days',btn:'Add to PO'},
+    {sev:'blue',cat:'Transfers',title:'Pacific Foam truck today',desc:'ETA 2:30 PM, PO-0411, 8 items',btn:'Receive'},
+    {sev:'amber',cat:'Stock',title:'EVA Foam 5mm Blue',desc:'45 units, reorder 80, 4 days',btn:'Add to PO'},
+    {sev:'blue',cat:'Transfers',title:'BOL-2026-041 dispatched',desc:'Ferndale — 40u, ETA 10:15 AM',btn:'View Transfer'},
+  ];
+  const tabs = [
+    {id:'all',icon:'✅',label:`All (${alerts.length})`},
+    {id:'Critical',icon:'🔴',label:`Critical (${alerts.filter(a=>a.sev==='red').length})`},
+    {id:'Stock',icon:'📦',label:`Stock (${alerts.filter(a=>a.cat==='Stock').length})`},
+    {id:'POs',icon:'📄',label:`POs (${alerts.filter(a=>a.cat==='POs').length})`},
+    {id:'Transfers',icon:'🚚',label:`Transfers (${alerts.filter(a=>a.cat==='Transfers').length})`},
+  ];
+  const filtered = tab==='all'?alerts:tab==='Critical'?alerts.filter(a=>a.sev==='red'):alerts.filter(a=>a.cat===tab);
+
+  // NAV-01: Route per role
+  const handleAction = (btn)=>{
+    if(btn==='Receive'){nav('grn');}
+    else if(btn==='View Transfer'){nav('transfers');}
+    else if(role==='warehouse-manager'){nav('purchasing-view');}
+    else{nav('purchasing-mgmt');}
+  };
+
+  useEffect(()=>{const h=(e)=>{if(e.key==='Escape')onClose();};document.addEventListener('keydown',h);return()=>document.removeEventListener('keydown',h);},[]);
+
+  return <>
+    <div className="alerts-pane-overlay" onClick={onClose}/>
+    <div className="alerts-pane">
+      <div className="alerts-pane-header"><h3>Alerts & Intelligence</h3><button onClick={onClose} style={{background:'none',color:'#fff',fontSize:20,cursor:'pointer',width:40,height:40,display:'flex',alignItems:'center',justifyContent:'center'}}>✕</button></div>
+      <div className="tab-bar" style={{padding:'0 12px'}}>
+        {tabs.map(t=><div key={t.id} className={`tab-item${tab===t.id?' active':''}`} onClick={()=>setTab(t.id)} style={{padding:'8px 8px',fontSize:11}}>{t.icon} {t.label}</div>)}
+      </div>
+      <div className="alerts-pane-body">
+        {filtered.map((a,i)=><div className="alert-pane-item" key={i}>
+          <div className="flex items-center gap-2" style={{marginBottom:4}}>
+            <div className={`severity-dot ${a.sev}`}/>
+            <div style={{fontWeight:600,fontSize:13}}>{a.title}</div>
+          </div>
+          <div style={{fontSize:12,color:'var(--text-secondary)',marginBottom:8,marginLeft:20}}>{a.desc}</div>
+          <div style={{marginLeft:20}}><button className="btn-sm btn-blue" style={{fontSize:11,padding:'4px 10px'}} onClick={()=>handleAction(a.btn)}>{a.btn}</button></div>
+        </div>)}
+      </div>
+    </div>
+  </>;
+}
+
 // ==================== APP SHELL ====================
 function AppShell({role,onLogout}) {
   const [screen,setScreen]=useState(DEFAULT_SCREENS[role]);
   const [showGlobalQR,setShowGlobalQR]=useState(false);
+  const [toasts,setToasts]=useState([]);
+  const [wizardActive,setWizardActive]=useState(false);
+  const [pendingNav,setPendingNav]=useState(null);
+  const [navContext,setNavContext]=useState(null);
+  const [alertsPaneOpen,setAlertsPaneOpen]=useState(false);
+  const addToast = useCallback((message,type)=>{
+    const id=Date.now();
+    setToasts(prev=>[...prev,{id,message,type}]);
+  },[]);
+  const removeToast = useCallback((id)=>{setToasts(prev=>prev.filter(t=>t.id!==id));},[]);
   const roleData = ROLES.find(r=>r.id===role);
   const navGroups = NAV_CONFIG[role]||[];
   const allNavIds = navGroups.flatMap(g=>g.items.map(i=>i.id));
@@ -1254,7 +1870,10 @@ function AppShell({role,onLogout}) {
   // Screen title mapping
   const titles = {dashboard:'Operations Dashboard',alerts:'Alerts & Intelligence',grn:'Receive Goods — GRN',inventory:'Inventory / QR Scan','cycle-count':'Cycle Count',transfers:'Transfers — Blaine to Ferndale','purchasing-view':'Purchasing Dashboard','purchasing-dash':'Purchasing Dashboard','purchasing-mgmt':'Purchasing','active-pos':'Active POs','vendor-perf':'Vendor Performance','dashboard-mfg':'Production Dashboard — Ferndale',kanban:'Request Materials from Blaine','transfers-mfg':'Transfer Status','exec-dash':'Executive Overview','po-approvals':'PO Approval Queue'};
 
-  const nav = (id)=>setScreen(id);
+  const nav = (id,ctx)=>{
+    if(wizardActive && id!==screen){setPendingNav(id);return;}
+    setScreen(id);setWizardActive(false);if(ctx)setNavContext(ctx);else setNavContext(null);
+  };
 
   // For production-floor, render mobile-only (no sidebar)
   if(role==='production-floor') return <div style={{background:'var(--surface)',minHeight:'100vh'}}>
@@ -1269,24 +1888,24 @@ function AppShell({role,onLogout}) {
     // Check permissions
     if(!allNavIds.includes(screen)){
       // Special case: warehouse-manager viewing purchasing
-      if(role==='warehouse-manager'&&screen==='purchasing-view') return <PurchasingDashScreen role={role} nav={nav}/>;
+      if(role==='warehouse-manager'&&screen==='purchasing-view') return <PurchasingDashScreen role={role} nav={nav} addToast={addToast}/>;
       return <AccessRestricted nav={nav} role={role}/>;
     }
     switch(screen){
-      case 'dashboard': return <DashboardWM nav={nav}/>;
+      case 'dashboard': return <DashboardWM nav={nav} openAlerts={()=>setAlertsPaneOpen(true)}/>;
       case 'alerts': return <AlertsScreen nav={nav}/>;
-      case 'grn': return <GRNScreen nav={nav}/>;
+      case 'grn': return <GRNScreen nav={nav} addToast={addToast} setWizardActive={setWizardActive}/>;
       case 'inventory': return <InventoryScreen nav={nav}/>;
-      case 'cycle-count': return <CycleCountScreen/>;
-      case 'transfers': return <TransfersScreen/>;
-      case 'purchasing-view': return <PurchasingDashScreen role={role} nav={nav}/>;
-      case 'purchasing-dash': return <PurchasingDashScreen role={role} nav={nav}/>;
-      case 'purchasing-mgmt': return <PurchasingMgmtScreen initialTab="worksheet"/>;
-      case 'active-pos': return <PurchasingMgmtScreen initialTab="active-pos"/>;
-      case 'vendor-perf': return <PurchasingMgmtScreen initialTab="vendor-perf"/>;
-      case 'dashboard-mfg': return <DashboardMfg nav={nav}/>;
+      case 'cycle-count': return <CycleCountScreen nav={nav} addToast={addToast}/>;
+      case 'transfers': return <TransfersScreen nav={nav} addToast={addToast} setWizardActive={setWizardActive} preSelectedItem={navContext}/>;
+      case 'purchasing-view': return <PurchasingDashScreen role={role} nav={nav} addToast={addToast}/>;
+      case 'purchasing-dash': return <PurchasingDashScreen role={role} nav={nav} addToast={addToast}/>;
+      case 'purchasing-mgmt': return <PurchasingMgmtScreen initialTab="worksheet" nav={nav} addToast={addToast}/>;
+      case 'active-pos': return <PurchasingMgmtScreen initialTab="active-pos" nav={nav} addToast={addToast}/>;
+      case 'vendor-perf': return <PurchasingMgmtScreen initialTab="vendor-perf" nav={nav} addToast={addToast}/>;
+      case 'dashboard-mfg': return <DashboardMfg nav={nav} addToast={addToast}/>;
       case 'kanban': return <KanbanScreen role={role}/>;
-      case 'transfers-mfg': return <TransfersScreen readOnly={true}/>;
+      case 'transfers-mfg': return <TransfersScreen readOnly={true} nav={nav} addToast={addToast}/>;
       case 'exec-dash': return <ExecDashboard mode="overview"/>;
       case 'po-approvals': return <ExecDashboard mode="approvals"/>;
       default: return <AccessRestricted nav={nav} role={role}/>;
@@ -1302,7 +1921,11 @@ function AppShell({role,onLogout}) {
       <div className="sidebar-nav">
         {navGroups.map((g,gi)=><div key={gi} className="nav-section">
           {g.section && <div className="nav-section-label">{g.section}</div>}
-          {g.items.map(item=><div key={item.id} className={`nav-item${screen===item.id?' active':''}`} onClick={()=>nav(item.id)}>
+          {g.items.map(item=><div key={item.id} className={`nav-item${screen===item.id?' active':''}`} onClick={()=>{
+            // NAV-02: Alerts nav item triggers pane, not screen navigation
+            if(item.id==='alerts'){setAlertsPaneOpen(true);return;}
+            nav(item.id);
+          }}>
             <span className="nav-icon">{item.icon}</span>{item.label}
             {item.badge && <span className={`nav-badge${item.badgeColor?' '+item.badgeColor:''}`}>{item.badge}</span>}
           </div>)}
@@ -1319,7 +1942,7 @@ function AppShell({role,onLogout}) {
         <div className="topbar-actions">
           <input className="topbar-search" placeholder="🔍 Search..."/>
           <button className="topbar-btn" onClick={()=>setShowGlobalQR(true)}>📷 Scan QR</button>
-          <button className="bell-btn" onClick={()=>nav('alerts')}><span style={{fontSize:20}}>🔔</span><span className="bell-badge">3</span></button>
+          <button className="bell-btn" onClick={()=>setAlertsPaneOpen(true)} aria-label="Open alerts (3 new)"><span style={{fontSize:20}}>🔔</span><span className="bell-badge">3</span></button>
           <div style={{width:32,height:32,borderRadius:'50%',background:'var(--cascade-blue)',display:'flex',alignItems:'center',justifyContent:'center',color:'#fff',fontWeight:600,fontSize:13}}>{roleData?.initials}</div>
         </div>
       </div>
@@ -1328,8 +1951,12 @@ function AppShell({role,onLogout}) {
         <div className="facility-pill"><div className="facility-dot red"/> <strong>FERNDALE</strong> 78% capacity · 14 active orders</div>
       </div>}
       {role==='general-manager'&&screen!=='exec-dash'&&screen!=='po-approvals'&&<div className="read-only-banner" style={{margin:'20px 24px 0'}}>Viewing in read-only mode — executive overview only.</div>}
+      {pendingNav && <ExitConfirmDialog onCancel={()=>setPendingNav(null)} onExit={()=>{setWizardActive(false);setScreen(pendingNav);setPendingNav(null);}}/>}
+      {/* A-01: Alerts side pane (440px slide-in) */}
+      {alertsPaneOpen && <AlertsPane role={role} nav={(id)=>{setAlertsPaneOpen(false);nav(id);}} onClose={()=>setAlertsPaneOpen(false)}/>}
       {showGlobalQR && <QRModal onClose={()=>setShowGlobalQR(false)} onResult={()=>{setShowGlobalQR(false);nav('inventory');}}/>}
       <div className="page-content">{renderScreen()}</div>
+      {toasts.length>0 && <div className="toast-container" aria-live="polite">{toasts.map(t=><Toast key={t.id} message={t.message} type={t.type} onDone={()=>removeToast(t.id)}/>)}</div>}
     </div>
   </div>;
 }
